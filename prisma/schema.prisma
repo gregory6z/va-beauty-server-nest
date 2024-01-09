@@ -10,25 +10,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
+enum UserRole {
+  CLIENT
+  ADMIN
+}
 
-  Appointments Appointment[]
+model User {
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  password String
+  phone    String
+  role     UserRole @default(CLIENT)
+
+  appointments Appointment[]
 
   @@map("users")
 }
 
 model Appointment {
-  id        String    @id @default(uuid())
+  id            String   @id @default(uuid())
+  appointmentId String   @map("appointment_id")
+  date          DateTime
+
+  services Service[]
+
+  appointment User @relation(fields: [appointmentId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("appointments")
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String
+  slug        String
+  category    String
+  price       Int
+  duration    Int
+  imgUrl      String[] @map("img_url")
+
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
 
   appointmentId String @map("appointment_id")
 
-  appointment User @relation(fields: [appointmentId], references: [id])
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  userId      String?
 
-  @@map("appointments")
+  @@map("services")
 }
