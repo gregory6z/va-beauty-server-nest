@@ -29,13 +29,13 @@ model User {
 }
 
 model Appointment {
-  id            String   @id @default(uuid())
-  appointmentId String   @map("appointment_id")
-  date          DateTime
+  id   String @id @default(uuid())
+  User User?  @relation(fields: [clientId], references: [id])
 
-  services Service[]
+  clientId String
+  date     DateTime
 
-  appointment User @relation(fields: [appointmentId], references: [id])
+  servicesIds String[]
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
@@ -45,6 +45,7 @@ model Appointment {
 
 model Service {
   id          String   @id @default(uuid())
+  stripeId    String   @unique
   name        String   @unique
   description String
   slug        String
@@ -55,11 +56,6 @@ model Service {
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
-
-  appointmentId String @map("appointment_id")
-
-  appointment Appointment @relation(fields: [appointmentId], references: [id])
-  userId      String?
 
   @@map("services")
 }

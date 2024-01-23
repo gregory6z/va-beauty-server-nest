@@ -18,6 +18,10 @@ export class InMemoryServiceRepository implements ServicesRepository {
     return totalDuration
   }
 
+  async findManyServices(): Promise<Service[]> {
+    return this.items
+  }
+
   async findManyByServiceId(servicesIds: string[]): Promise<string[]> {
     // this.items.map((service) => service.id.toString())
 

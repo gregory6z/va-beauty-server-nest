@@ -25,7 +25,7 @@ describe("Create Appointment", () => {
 
     const result = await sut.execute({
       clientId: "clientTest",
-      services: [service1.id.toString()],
+      servicesIds: [service1.id.toString()],
       date: new Date("December 17, 2200 10:24:00"),
     })
 
@@ -40,7 +40,7 @@ describe("Create Appointment", () => {
 
     const result = await sut.execute({
       clientId: "clientTest",
-      services: [service1.id.toString(), service2.id.toString()],
+      servicesIds: [service1.id.toString(), service2.id.toString()],
       date: new Date("December 17, 2200 10:24:00"),
     })
 
@@ -57,7 +57,7 @@ describe("Create Appointment", () => {
   it("should not be possible to schedule an appointment with a nonexistent or null service.", async () => {
     const result = await sut.execute({
       clientId: "clientTest",
-      services: ["non-existent service"],
+      servicesIds: ["non-existent service"],
       date: new Date("December 17, 2200 03:24:00"),
     })
 
@@ -71,7 +71,7 @@ describe("Create Appointment", () => {
 
     const result = await sut.execute({
       clientId: "clientTest",
-      services: [service1.id.toString()],
+      servicesIds: [service1.id.toString()],
       date: new Date("December 17, 1999 10:24:00"),
     })
 
@@ -85,7 +85,7 @@ describe("Create Appointment", () => {
 
     const result = await sut.execute({
       clientId: "clientTest",
-      services: [service1.id.toString()],
+      servicesIds: [service1.id.toString()],
       date: new Date("December 17, 2025 03:00:00"),
     })
 
@@ -99,7 +99,7 @@ describe("Create Appointment", () => {
 
     const result = await sut.execute({
       clientId: "clientTest",
-      services: [service1.id.toString()],
+      servicesIds: [service1.id.toString()],
       date: new Date("December 17, 2025 22:00:00"),
     })
 

@@ -6,12 +6,13 @@ import { Optional } from "@/core/types/optional"
 
 export interface ServiceProps {
   name: string
+  stripeId: string
   description: string
   slug: Slug
   category: string
   price: number
   duration: number
-  img_url: string
+  imgUrl: string[]
 
   createdAt: Date
   updatedAt?: Date | null
@@ -22,7 +23,15 @@ export class Service extends Entity<ServiceProps> {
     return this.props.name
   }
 
-  set name(name: string) {
+  get stripeId() {
+    return this.props.stripeId
+  }
+
+  get slug() {
+    return this.props.name
+  }
+
+  set slug(name: string) {
     this.props.name = name
     this.props.slug = Slug.createFromText(name)
 
@@ -41,8 +50,8 @@ export class Service extends Entity<ServiceProps> {
     return this.props.price
   }
 
-  get img_url() {
-    return this.props.img_url
+  get imgUrl() {
+    return this.props.imgUrl
   }
 
   get duration() {

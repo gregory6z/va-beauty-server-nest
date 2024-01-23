@@ -14,7 +14,7 @@ Content-Type: application/json
 ###
 
 # @name authenticate
-POST {{baseUrl}}/sessions
+POST {{baseUrl}}/sync-services
 Content-Type: application/json
 
 {

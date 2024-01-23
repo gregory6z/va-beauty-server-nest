@@ -18,7 +18,8 @@ describe("Create Service", () => {
       category: "category",
       price: 40,
       duration: 30,
-      img_url: "url",
+      imgUrl: ["url"],
+      stripeId: "stripeId",
     })
 
     expect(result.isRight()).toBe(true)

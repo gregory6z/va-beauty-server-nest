@@ -17,7 +17,7 @@ export function makeService(
       description: faker.lorem.sentence(),
       duration: 30,
       price: 20,
-      img_url: faker.lorem.sentence(),
+      imgUrl: faker.lorem.sentence(),
       ...override,
     },
     id,

@@ -3,6 +3,9 @@ import { ConfigModule } from "@nestjs/config"
 
 import { envSchema } from "./infra/env/env"
 import { EnvModule } from "./infra/env/env.module"
+import { HttpModule } from "./infra/http.module"
+import { StripeNestModule } from "./infra/stripe/stripe.module"
+import { ClerkModule } from "./infra/auth/clerk/clerk.module"
 
 @Module({
   imports: [
@@ -11,6 +14,10 @@ import { EnvModule } from "./infra/env/env.module"
       isGlobal: true,
     }),
     EnvModule,
+    HttpModule,
+    ClerkModule,
+    StripeNestModule,
   ],
+  controllers: [],
 })
 export class AppModule {}

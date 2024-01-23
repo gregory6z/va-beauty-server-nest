@@ -5,11 +5,12 @@ import { ServicesRepository } from "../../repositories/services-repository"
 
 interface CreateServiceUseCaseRequest {
   name: string
+  stripeId: string
   description: string
   category: string
   price: number
   duration: number
-  img_url: string
+  imgUrl: string[]
 }
 
 type CreateServiceUseCaseResponse = Either<
@@ -29,17 +30,19 @@ export class CreateServiceUseCase {
     category,
     price,
     duration,
+    stripeId,
     // eslint-disable-next-line camelcase
-    img_url,
+    imgUrl,
   }: CreateServiceUseCaseRequest): Promise<CreateServiceUseCaseResponse> {
     const service = Service.create({
       name,
+      stripeId,
       description,
       category,
       price,
       duration,
       // eslint-disable-next-line camelcase
-      img_url,
+      imgUrl,
     })
 
     await this.servicesRepository.create(service)

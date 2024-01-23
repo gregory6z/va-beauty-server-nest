@@ -5,14 +5,13 @@ import { startOfHour, isBefore } from "date-fns"
 
 import { Injectable } from "@nestjs/common"
 import { Appointment } from "../../enterprise/entities/appointment"
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
 import { AppointmentsRepository } from "../../repositories/appointments-repository"
 
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error"
 
 interface CreateAppointmentUseCaseRequest {
   clientId: string
-  services: string[]
+  servicesIds: string[]
   date: Date
 }
 
@@ -33,10 +32,10 @@ export class CreateAppointmentUseCase {
   async execute({
     clientId,
     date,
-    services,
+    servicesIds,
   }: CreateAppointmentUseCaseRequest): Promise<CreateAppointmentUseCaseResponse> {
     const ServiceValidated = await this.servicesRepository.findManyByServiceId(
-      services,
+      servicesIds,
     )
 
     if (!ServiceValidated) {
@@ -47,9 +46,9 @@ export class CreateAppointmentUseCase {
     }
 
     const appointment = Appointment.create({
-      clientId: new UniqueEntityID(clientId),
+      clientId,
       date,
-      services: ServiceValidated,
+      servicesIds: ServiceValidated,
     })
 
     const appointmentDate = startOfHour(date)

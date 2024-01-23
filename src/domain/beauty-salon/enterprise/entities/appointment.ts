@@ -2,25 +2,24 @@ import { Entity } from "@/core/entities/entity"
 import { UniqueEntityID } from "@/core/entities/unique-entity-id"
 import { Optional } from "@/core/types/optional"
 import dayjs from "dayjs"
-import { Service } from "./service"
 
 export interface AppointmentProps {
-  clientId: UniqueEntityID
+  clientId: string
   date: Date
 
-  services: string[]
+  servicesIds: string[]
 
   createdAt: Date
   updatedAt?: Date | null
 }
 
 export class Appointment extends Entity<AppointmentProps> {
-  get appointmentId() {
+  get clientId() {
     return this.props.clientId
   }
 
   get services() {
-    return this.props.services
+    return this.props.servicesIds
   }
 
   get date() {
