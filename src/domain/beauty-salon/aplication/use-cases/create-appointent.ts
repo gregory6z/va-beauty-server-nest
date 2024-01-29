@@ -34,9 +34,8 @@ export class CreateAppointmentUseCase {
     date,
     servicesIds,
   }: CreateAppointmentUseCaseRequest): Promise<CreateAppointmentUseCaseResponse> {
-    const ServiceValidated = await this.servicesRepository.findManyByServiceId(
-      servicesIds,
-    )
+    const ServiceValidated =
+      await this.servicesRepository.findManyByServiceId(servicesIds)
 
     if (!ServiceValidated) {
       return left(new NotAllowedError())

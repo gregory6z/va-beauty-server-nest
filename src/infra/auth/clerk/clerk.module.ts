@@ -1,7 +1,7 @@
 // clerk.module.ts
 import { Module, DynamicModule } from "@nestjs/common"
 import { ClerkService } from "./clerk.service"
-import { AuthGuard } from "./clerk.guard"
+import { ClerkAuthGuard } from "./clerk.guard"
 
 @Module({})
 export class ClerkModule {
@@ -20,7 +20,7 @@ export class ClerkModule {
         ClerkService,
         AuthGuard,
       ],
-      exports: [ClerkService, AuthGuard],
+      exports: [ClerkService, ClerkAuthGuard],
     }
   }
 }

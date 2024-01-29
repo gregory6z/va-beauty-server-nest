@@ -15,22 +15,8 @@ enum UserRole {
   ADMIN
 }
 
-model User {
-  id       String   @id @default(uuid())
-  name     String
-  email    String   @unique
-  password String
-  phone    String
-  role     UserRole @default(CLIENT)
-
-  appointments Appointment[]
-
-  @@map("users")
-}
-
 model Appointment {
-  id   String @id @default(uuid())
-  User User?  @relation(fields: [clientId], references: [id])
+  id String @id @default(uuid())
 
   clientId String
   date     DateTime

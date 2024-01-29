@@ -35,16 +35,16 @@ export class PrismaServicesRepository implements ServicesRepository {
   async findManyByServiceId(services: string[]): Promise<string[]> {
     const matchingIds = await this.prisma.service.findMany({
       where: {
-        id: {
+        stripeId: {
           in: services,
         },
       },
       select: {
-        id: true,
+        stripeId: true,
       },
     })
 
-    return matchingIds.map((service) => service.id.toString())
+    return matchingIds.map((service) => service.stripeId.toString())
   }
 
   async findManyServices(): Promise<Service[]> {

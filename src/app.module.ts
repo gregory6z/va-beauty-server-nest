@@ -15,7 +15,7 @@ import { ClerkModule } from "./infra/auth/clerk/clerk.module"
     }),
     EnvModule,
     HttpModule,
-    ClerkModule,
+    // ClerkModule,
     StripeNestModule,
   ],
   controllers: [],

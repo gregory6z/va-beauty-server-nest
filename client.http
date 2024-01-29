@@ -1,42 +1,45 @@
 @baseUrl = http://localhost:3333
-@authToken = {{authenticate.response.body.access_token}}
+# @authToken = {{authenticate.response.body.access_token}}
 
-# @name create_account
-POST {{baseUrl}}/accounts
+# # @name create_account
+# POST {{baseUrl}}/accounts
+# Content-Type: application/json
+
+# {
+#   "name": "Gregory Praxedes",
+#   "email": "gregoryrag@gmail.com",
+#   "password": "123456"
+# }
+
+###
+
+# # @name authenticate
+# POST {{baseUrl}}/sync-services
+# Content-Type: application/json
+
+# {
+#   "email": "gregoryrag@gmail.com",
+#   "password": "123456"
+# }
+
+###
+
+# @name create_appointment
+POST {{baseUrl}}/appointments
 Content-Type: application/json
 
 {
-  "name": "Gregory Praxedes",
-  "email": "gregoryrag@gmail.com",
-  "password": "123456"
+  "date": "2025-04-26T12:00:00",
+  "servicesIds": ["prod_NzleLbOmmqnw3E", "prod_NzlfW9d7KB18SY"],
+  "clientId": "clientId"
 }
 
 ###
 
-# @name authenticate
-POST {{baseUrl}}/sync-services
+# @name fecth-day-availability
+GET {{baseUrl}}/day-availability?day=26&month=4&year=2025
 Content-Type: application/json
 
-{
-  "email": "gregoryrag@gmail.com",
-  "password": "123456"
-}
 
 ###
 
-# @name create_question
-POST {{baseUrl}}/questions
-Content-Type: application/json
-Authorization: Bearer {{authToken}}
-
-{
-  "title": "Nova pergunta 2",
-  "content": "Teste"
-}
-
-###
-
-# @name fetch_recent_questions
-GET {{baseUrl}}/questions?page=2
-Content-Type: application/json
-Authorization: Bearer {{authToken}}

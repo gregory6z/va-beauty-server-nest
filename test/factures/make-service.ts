@@ -4,7 +4,10 @@ import {
   Service,
   ServiceProps,
 } from "@/domain/beauty-salon/enterprise/entities/service"
+import { PrismaServicesMapper } from "@/infra/database/prisma/mappers/prisma-services-mapper"
+import { PrismaService } from "@/infra/database/prisma/prisma.service"
 import { faker } from "@faker-js/faker"
+import { Injectable } from "@nestjs/common"
 
 export function makeService(
   override: Partial<ServiceProps> = {},
@@ -17,7 +20,8 @@ export function makeService(
       description: faker.lorem.sentence(),
       duration: 30,
       price: 20,
-      imgUrl: faker.lorem.sentence(),
+      stripeId: new UniqueEntityID().toString(),
+      imgUrl: [faker.lorem.sentence()],
       ...override,
     },
     id,
@@ -26,17 +30,17 @@ export function makeService(
   return service
 }
 
-// @Injectable()
-// export class StudentFactory {
-//   constructor(private prisma: PrismaService) {}
+@Injectable()
+export class ServiceFactory {
+  constructor(private prisma: PrismaService) {}
 
-//   async makePrismaStudent(data: Partial<StudentProps> = {}): Promise<Student> {
-//     const student = makeStudent(data)
+  async makePrismaService(data: Partial<ServiceProps> = {}): Promise<Service> {
+    const service = makeService(data)
 
-//     await this.prisma.user.create({
-//       data: PrismaStudentMapper.toPrisma(student),
-//     })
+    await this.prisma.service.create({
+      data: PrismaServicesMapper.toPrisma(service),
+    })
 
-//     return student
-//   }
-// }
+    return service
+  }
+}

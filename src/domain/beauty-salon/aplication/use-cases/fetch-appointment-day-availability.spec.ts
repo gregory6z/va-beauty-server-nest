@@ -27,12 +27,12 @@ describe("Fetch appointment day availability", () => {
 
     const appointment1 = makeAppointment({
       date: new Date(Date.UTC(2025, 3, 26, 7, 0, 0)),
-      services: [service1.id.toString(), service2.id.toString()],
+      servicesIds: [service1.stripeId.toString(), service2.stripeId.toString()],
     })
 
     const appointment2 = makeAppointment({
       date: new Date(Date.UTC(2025, 3, 26, 15, 0, 0)),
-      services: [service1.id.toString(), service2.id.toString()],
+      servicesIds: [service1.stripeId.toString(), service2.stripeId.toString()],
     })
 
     inMemoryAppointmentRepository.items.push(appointment1, appointment2)

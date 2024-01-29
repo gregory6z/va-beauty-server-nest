@@ -1,7 +1,7 @@
 import { BadRequestException, Controller, Get, Query } from "@nestjs/common"
 import { z } from "zod"
 import { ZodValidationPipe } from "../pipes/zod-validation.pipe"
-import { FetchAppointmentsDayAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-day-availability"
+import { FetchAppointmentsMonthAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-month-availability"
 
 const pageQueryParamSchema = z.string().transform(Number)
 
@@ -9,20 +9,18 @@ const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema)
 
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
-@Controller("/day-availability")
-export class FetchDayAvailabilityController {
+@Controller("/month-availability")
+export class FetchMonthAvailabilityController {
   constructor(
-    private fetchDayAvailability: FetchAppointmentsDayAvailabilityUseCase,
+    private fetchMonthAvailability: FetchAppointmentsMonthAvailabilityUseCase,
   ) {}
 
   @Get()
   async handle(
-    @Query("day", queryValidationPipe) day: PageQueryParamSchema,
     @Query("month", queryValidationPipe) month: PageQueryParamSchema,
     @Query("year", queryValidationPipe) year: PageQueryParamSchema,
   ) {
-    const result = await this.fetchDayAvailability.execute({
-      day,
+    const result = await this.fetchMonthAvailability.execute({
       month,
       year,
     })
