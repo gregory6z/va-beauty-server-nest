@@ -3,13 +3,12 @@ import {
   Body,
   Controller,
   Post,
-  UseGuards,
+  Request,
 } from "@nestjs/common"
 
 import { z } from "zod"
 import { ZodValidationPipe } from "../pipes/zod-validation.pipe"
 import { CreateAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cases/create-appointent"
-import { ClerkAuthGuard } from "@/infra/auth/clerk/clerk.guard"
 
 const createAppointmentBodySchema = z.object({
   clientId: z.string(),
@@ -27,10 +26,13 @@ export class CreateAppointmentController {
 
   @Post()
   async handle(
+    @Request() request,
     @Body(bodyValidationPipe)
     body: CreateAppointmentBodySchema,
   ) {
     const { servicesIds, date, clientId } = body
+
+    console.log(request.user)
 
     const result = await this.createAppointment.execute({
       clientId,

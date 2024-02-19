@@ -51,7 +51,6 @@ describe("Create Appointment (E2E)", () => {
         servicesIds: [service1.stripeId, service2.stripeId],
         date: new Date(2025, 3, 26, 12, 0, 0),
       })
-    console.log(response)
 
     expect(response.statusCode).toBe(201)
 

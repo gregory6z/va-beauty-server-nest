@@ -1,4 +1,4 @@
-import { Either, left, right } from "@/core/either"
+import { Either, right } from "@/core/either"
 import { Service } from "../../enterprise/entities/service"
 import { Injectable } from "@nestjs/common"
 import { ServicesRepository } from "../../repositories/services-repository"

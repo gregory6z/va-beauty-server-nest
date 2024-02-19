@@ -5,7 +5,6 @@ import { envSchema } from "./infra/env/env"
 import { EnvModule } from "./infra/env/env.module"
 import { HttpModule } from "./infra/http.module"
 import { StripeNestModule } from "./infra/stripe/stripe.module"
-import { ClerkModule } from "./infra/auth/clerk/clerk.module"
 
 @Module({
   imports: [
@@ -15,7 +14,6 @@ import { ClerkModule } from "./infra/auth/clerk/clerk.module"
     }),
     EnvModule,
     HttpModule,
-    // ClerkModule,
     StripeNestModule,
   ],
   controllers: [],
