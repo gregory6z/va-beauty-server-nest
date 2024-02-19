@@ -1,5 +1,9 @@
-import { FetchAppointmentsWeekAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appoitnment-week-availability"
-import { Controller, Get, Query } from "@nestjs/common"
+// Importe a interface aqui
+import {
+  FetchAppointmentsWeekAvailabilityUseCase,
+  WeekAvailability,
+} from "@/domain/beauty-salon/aplication/use-cases/fetch-appoitnment-week-availability"
+import { Controller, Get } from "@nestjs/common"
 
 @Controller("availability")
 export class AvailabilityController {
@@ -8,26 +12,20 @@ export class AvailabilityController {
   ) {}
 
   @Get("weeks")
-  async getWeeksAvailability(
-    @Query("startDay") startDay: number,
-    @Query("month") month: number,
-    @Query("year") year: number,
-    @Query("numberOfWeeks") numberOfWeeks: number,
-  ) {
-    const weeksAvailability = []
+  async getWeeksAvailability(): Promise<WeekAvailability[]> {
+    const numberOfWeeks = 26 // Definindo o número de semanas como 26
+
+    const weeksAvailability: WeekAvailability[] = []
 
     for (let i = 0; i < numberOfWeeks; i++) {
-      const currentStartDay = startDay + i * 7
       const response =
-        await this.fetchAppointmentsWeekAvailabilityUseCase.execute({
-          startDay: currentStartDay,
-          month,
-          year,
-        })
+        await this.fetchAppointmentsWeekAvailabilityUseCase.execute({}) // Passando um objeto vazio
+
       if (response.isLeft()) {
-        throw new Error(response.value.message) // Tratar erro de forma adequada no seu aplicativo
+        throw new Error(response.value.message) // Lidar com erro adequadamente no seu aplicativo
       }
-      weeksAvailability.push(response.value) // Adiciona a disponibilidade da semana ao array
+
+      weeksAvailability.push(response.value) // Adicionar a disponibilidade da semana ao array
     }
 
     return weeksAvailability

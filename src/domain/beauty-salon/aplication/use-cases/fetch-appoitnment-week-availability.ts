@@ -18,7 +18,7 @@ interface TimeSlot {
   available: boolean
 }
 
-type WeekAvailability = { date: Date; availability: TimeSlot[] }[]
+export type WeekAvailability = { date: Date; availability: TimeSlot[] }[]
 
 type FetchAppointmentsWeekAvailabilityUseCaseResponse = Either<
   FetchAppointmentsWeekAvailabilityUseCaseError,
