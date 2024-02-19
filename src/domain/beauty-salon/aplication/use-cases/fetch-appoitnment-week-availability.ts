@@ -6,9 +6,6 @@ import dayjs from "dayjs"
 import { ServicesRepository } from "../../repositories/services-repository"
 
 interface FetchAppointmentsWeekAvailabilityUseCaseRequest {
-  startDay: number
-  month: number
-  year: number
   numberOfWeeks?: number // tornando numberOfWeeks opcional
 }
 
@@ -36,23 +33,29 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
   ) {}
 
   async execute({
-    startDay,
-    month,
-    year,
     numberOfWeeks = 26, // definindo o valor padrão para numberOfWeeks como 26 (6 meses)
   }: FetchAppointmentsWeekAvailabilityUseCaseRequest): Promise<FetchAppointmentsWeekAvailabilityUseCaseResponse> {
     try {
       const weekAvailability: WeekAvailability = []
 
-      // Itera sobre o número de semanas desejado ou o padrão (26 semanas)
+      // Obter o dia da semana atual (0 para Domingo, 1 para Segunda, ..., 6 para Sábado)
+      const startDay = dayjs().day()
+
+      // Obter o mês atual
+      const currentMonth = dayjs().month() + 1
+
+      // Obter o ano atual
+      const currentYear = dayjs().year()
+
+      // Iterar sobre o número de semanas desejado ou o padrão (26 semanas)
       for (let week = 0; week < numberOfWeeks; week++) {
-        // Calcula o início da semana atual
+        // Calcular o início da semana atual
         const currentStartDay = startDay + week * 7
 
         for (let i = 0; i < 7; i++) {
           const currentDate = dayjs()
-            .year(year)
-            .month(month - 1)
+            .year(currentYear)
+            .month(currentMonth - 1)
             .date(currentStartDay + i)
 
           const appointments =
@@ -89,7 +92,12 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
           const availability = eachMinuteArray.map((minute) => {
             const hasAppointmentInMinute = arrayOfAppointments.includes(minute)
             const compareDate = setSeconds(
-              new Date(year, month - 1, currentDate.date(), minute),
+              new Date(
+                currentYear,
+                currentMonth - 1,
+                currentDate.date(),
+                minute,
+              ),
               0,
             )
             return {

@@ -1,8 +1,8 @@
-import { InMemoryAppointmentRepository } from "./../../../../../test/repositories/in-memory-appointments-repository"
-import { InMemoryServiceRepository } from "test/repositories/in-memory-services-repository"
-import { makeAppointment } from "test/factures/make-appointments"
 import { makeService } from "test/factures/make-service"
+import { InMemoryAppointmentRepository } from "./../../../../../test/repositories/in-memory-appointments-repository"
+import { InMemoryServiceRepository } from "./../../../../../test/repositories/in-memory-services-repository"
 import { FetchAppointmentsWeekAvailabilityUseCase } from "./fetch-appoitnment-week-availability"
+import { makeAppointment } from "test/factures/make-appointments"
 
 let inMemoryServiceRepository: InMemoryServiceRepository
 let inMemoryAppointmentRepository: InMemoryAppointmentRepository
@@ -80,19 +80,11 @@ describe("Fetch appointment week availability", () => {
 
     inMemoryAppointmentRepository.items.push(...appointments)
 
-    const numberOfWeeks = 6 // Number of weeks to fetch
-
-    const result = await sut.execute({
-      startDay: 26, // Monday
-      month: 4,
-      year: 2025,
-      numberOfWeeks,
-    })
+    const result = await sut.execute({})
 
     console.log(result)
 
     expect(result.isRight()).toBe(true)
-
-    // Test other assertions as needed to verify the correctness of the result
+    // You may need to adjust this expectation based on the actual behavior of your implementation
   })
 })
