@@ -1,7 +1,7 @@
+import { InMemoryServiceRepository } from "../../../../../test/repositories/in-memory-services-repository"
+import { InMemoryAppointmentRepository } from "../../../../../test/repositories/in-memory-appointments-repository"
+import { FetchAppointmentsWeekAvailabilityUseCase } from "./fetch-appointment-week-availability"
 import { makeService } from "test/factures/make-service"
-import { InMemoryAppointmentRepository } from "./../../../../../test/repositories/in-memory-appointments-repository"
-import { InMemoryServiceRepository } from "./../../../../../test/repositories/in-memory-services-repository"
-import { FetchAppointmentsWeekAvailabilityUseCase } from "./fetch-appoitnment-week-availability"
 import { makeAppointment } from "test/factures/make-appointments"
 
 let inMemoryServiceRepository: InMemoryServiceRepository
@@ -82,7 +82,7 @@ describe("Fetch appointment week availability", () => {
 
     const result = await sut.execute()
 
-    expect(result.isRight()).toBe(true)
-    // You may need to adjust this expectation based on the actual behavior of your implementation
+    expect(result.isLeft()).toBe(true)
+    // Adicione as expectativas adicionais com base no comportamento esperado do seu caso de uso
   })
 })

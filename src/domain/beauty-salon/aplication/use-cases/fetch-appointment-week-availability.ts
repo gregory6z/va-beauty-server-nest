@@ -16,7 +16,7 @@ export interface TimeSlot {
 
 export type DayAvailability = TimeSlot[]
 
-export type WeekAvailability = { day: Date; timeSlots: DayAvailability }[]
+export type WeekAvailability = { day: Date; timeSlots: DayAvailability }
 
 type FetchWeekAvailabilityUseCaseResponse = Either<
   FetchWeekAvailabilityUseCaseError,
@@ -47,11 +47,6 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
       const durationBreakTime = 60 // duração do intervalo (em minutos)
 
       for (let week = 0; week < numberOfWeeks; week++) {
-        const weekAvailabilityForWeek: {
-          day: Date
-          timeSlots: DayAvailability
-        }[] = []
-
         for (let day = 0; day < numberOfDaysInWeek; day++) {
           const currentDate = today.add(week * numberOfDaysInWeek + day, "day")
 
@@ -125,10 +120,8 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
             }
           })
 
-          weekAvailabilityForWeek.push({ day: currentDateObject, timeSlots })
+          weekAvailability.push({ day: currentDateObject, timeSlots })
         }
-
-        weekAvailability.push(weekAvailabilityForWeek)
       }
 
       return right(weekAvailability)

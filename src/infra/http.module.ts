@@ -10,7 +10,7 @@ import { FetchDayAvailabilityController } from "./http/controllers/fetch-appoint
 import { FetchAppointmentsDayAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-day-availability"
 import { FetchAppointmentsMonthAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-month-availability"
 import { FetchMonthAvailabilityController } from "./http/controllers/fetch-appointment-month-availability"
-import { FetchAppointmentsWeekAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appoitnment-week-availability"
+import { FetchAppointmentsWeekAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-week-availability"
 import { FetchWeekAvailabilityController } from "./http/controllers/fetch-appointment-week-availability"
 
 @Module({

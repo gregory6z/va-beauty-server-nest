@@ -1,7 +1,7 @@
 import {
   FetchAppointmentsWeekAvailabilityUseCase,
   WeekAvailability,
-} from "@/domain/beauty-salon/aplication/use-cases/fetch-appoitnment-week-availability"
+} from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-week-availability"
 import { Controller, Get } from "@nestjs/common"
 
 @Controller("week-availability")
