@@ -80,9 +80,7 @@ describe("Fetch appointment week availability", () => {
 
     inMemoryAppointmentRepository.items.push(...appointments)
 
-    const result = await sut.execute({})
-
-    console.log(result)
+    const result = await sut.execute()
 
     expect(result.isRight()).toBe(true)
     // You may need to adjust this expectation based on the actual behavior of your implementation

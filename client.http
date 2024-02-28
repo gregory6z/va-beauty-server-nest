@@ -42,3 +42,12 @@ Content-Type: application/json
 
 ###
 
+
+# @name fecth-week-availability
+GET {{baseUrl}}/week-availability
+Content-Type: application/json
+
+
+###
+
+

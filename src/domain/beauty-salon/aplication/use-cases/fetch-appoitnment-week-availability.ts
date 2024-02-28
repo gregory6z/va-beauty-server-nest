@@ -1,28 +1,26 @@
-import { Injectable } from "@nestjs/common"
 import { Either, left, right } from "@/core/either"
+import { Injectable } from "@nestjs/common"
 import { AppointmentsRepository } from "../../repositories/appointments-repository"
 import { isAfter, setSeconds } from "date-fns"
-import dayjs from "dayjs"
+import * as dayjs from "dayjs"
 import { ServicesRepository } from "../../repositories/services-repository"
 
-interface FetchAppointmentsWeekAvailabilityUseCaseRequest {
-  numberOfWeeks?: number // tornando numberOfWeeks opcional
-}
-
-interface FetchAppointmentsWeekAvailabilityUseCaseError {
+interface FetchWeekAvailabilityUseCaseError {
   message: string
 }
 
-interface TimeSlot {
+export interface TimeSlot {
   minute: number
   available: boolean
 }
 
-export type WeekAvailability = { date: Date; availability: TimeSlot[] }[]
+export type DayAvailability = TimeSlot[]
 
-type FetchAppointmentsWeekAvailabilityUseCaseResponse = Either<
-  FetchAppointmentsWeekAvailabilityUseCaseError,
-  WeekAvailability
+export type WeekAvailability = { day: Date; timeSlots: DayAvailability }[]
+
+type FetchWeekAvailabilityUseCaseResponse = Either<
+  FetchWeekAvailabilityUseCaseError,
+  WeekAvailability[]
 >
 
 @Injectable()
@@ -32,31 +30,30 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
     private servicesRepository: ServicesRepository,
   ) {}
 
-  async execute({
-    numberOfWeeks = 26, // definindo o valor padrão para numberOfWeeks como 26 (6 meses)
-  }: FetchAppointmentsWeekAvailabilityUseCaseRequest): Promise<FetchAppointmentsWeekAvailabilityUseCaseResponse> {
+  async execute(): Promise<FetchWeekAvailabilityUseCaseResponse> {
     try {
-      const weekAvailability: WeekAvailability = []
+      const weekAvailability: WeekAvailability[] = []
 
-      // Obter o dia da semana atual (0 para Domingo, 1 para Segunda, ..., 6 para Sábado)
-      const startDay = dayjs().day()
+      const numberOfWeeks = 26 // 6 meses
+      const numberOfDaysInWeek = 7
+      const today = dayjs()
 
-      // Obter o mês atual
-      const currentMonth = dayjs().month() + 1
+      const StartOfService = 480 // 8 horas
+      const EndOfService = 1080 // 18 horas
+      const slotTime = 15 // slots de 15 minutos
 
-      // Obter o ano atual
-      const currentYear = dayjs().year()
+      // Tempo de intervalo para o almoço
+      const BreakTime = 720 // 12 horas
+      const durationBreakTime = 60 // duração do intervalo (em minutos)
 
-      // Iterar sobre o número de semanas desejado ou o padrão (26 semanas)
       for (let week = 0; week < numberOfWeeks; week++) {
-        // Calcular o início da semana atual
-        const currentStartDay = startDay + week * 7
+        const weekAvailabilityForWeek: {
+          day: Date
+          timeSlots: DayAvailability
+        }[] = []
 
-        for (let i = 0; i < 7; i++) {
-          const currentDate = dayjs()
-            .year(currentYear)
-            .month(currentMonth - 1)
-            .date(currentStartDay + i)
+        for (let day = 0; day < numberOfDaysInWeek; day++) {
+          const currentDate = today.add(week * numberOfDaysInWeek + day, "day")
 
           const appointments =
             await this.appointmentsRepository.findAvailableDayTimeSlots({
@@ -73,49 +70,72 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
               someServices,
             )
 
-          const arrayOfAppointments: number[] = []
-          for (const { date } of appointments) {
-            const startTime = dayjs(date).hour() * 60 + dayjs(date).minute()
+          const startTimes: number[] = appointments.map(({ date }) => {
+            const hours = dayjs(date).hour()
+            const minutes = dayjs(date).minute()
+            return hours * 60 + minutes
+          })
+
+          const arrays: number[][] = []
+
+          for (const startTime of startTimes) {
             const newArray = Array.from(
-              { length: Math.ceil(durationOfService / 15) },
-              (_, index) => startTime + index * 15,
+              { length: Math.ceil(durationOfService / slotTime) },
+              (_, index) => startTime + index * slotTime,
             )
-            arrayOfAppointments.push(...newArray)
+            arrays.push(newArray)
           }
 
-          const eachMinuteArray = Array.from(
-            { length: 720 },
-            (_, index) => index,
+          const arrayDoAlmoco = Array.from(
+            { length: Math.ceil(durationBreakTime / slotTime) },
+            (_, index) => BreakTime + index * slotTime,
           )
+
+          const arrayToSort = (a, b) => a - b
+
+          const arrayOfAppointments: number[] = ([] as number[])
+            .concat(...arrays)
+            .concat(arrayDoAlmoco)
+            .sort(arrayToSort)
+
+          const numberOfArray = (EndOfService - StartOfService) / slotTime
+          const eachMinuteArray = Array.from(
+            { length: numberOfArray },
+            (_, index) => StartOfService + index * slotTime,
+          )
+
           const currentDateObject = currentDate.toDate()
 
-          const availability = eachMinuteArray.map((minute) => {
+          const timeSlots: DayAvailability = eachMinuteArray.map((minute) => {
             const hasAppointmentInMinute = arrayOfAppointments.includes(minute)
             const compareDate = setSeconds(
               new Date(
-                currentYear,
-                currentMonth - 1,
+                currentDate.year(),
+                currentDate.month(),
                 currentDate.date(),
-                minute,
+                Math.floor(minute / 60), // hora
+                minute % 60, // minuto
               ),
               0,
             )
             return {
               minute,
               available:
-                !hasAppointmentInMinute &&
-                isAfter(compareDate, currentDateObject),
+                !hasAppointmentInMinute && isAfter(compareDate, new Date()),
             }
           })
 
-          weekAvailability.push({ date: currentDateObject, availability })
+          weekAvailabilityForWeek.push({ day: currentDateObject, timeSlots })
         }
+
+        weekAvailability.push(weekAvailabilityForWeek)
       }
 
       return right(weekAvailability)
     } catch (error) {
       return left({
-        message: "Error fetching week appointments availability.",
+        message: "Erro ao buscar a disponibilidade semanal.",
+        error,
       })
     }
   }
