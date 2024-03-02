@@ -12,9 +12,14 @@ import { FetchAppointmentsMonthAvailabilityUseCase } from "@/domain/beauty-salon
 import { FetchMonthAvailabilityController } from "./http/controllers/fetch-appointment-month-availability"
 import { FetchAppointmentsWeekAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-week-availability"
 import { FetchWeekAvailabilityController } from "./http/controllers/fetch-appointment-week-availability"
+import { EmailUseCase } from "@/domain/beauty-salon/aplication/use-cases/email"
+import { AuthenticateController } from "./http/controllers/authenticate.controler"
+import { AuthenticateClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/authenticate-client"
+import { CryptographyModule } from "./cryptography/cryptography.module"
+import { AuthModule } from "./auth/auth.module"
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, CryptographyModule, AuthModule],
   controllers: [
     StripeController,
     CreateAppointmentController,
@@ -22,6 +27,7 @@ import { FetchWeekAvailabilityController } from "./http/controllers/fetch-appoin
     FetchDayAvailabilityController,
     FetchMonthAvailabilityController,
     FetchWeekAvailabilityController,
+    AuthenticateController,
   ],
   providers: [
     StripeService,
@@ -30,6 +36,8 @@ import { FetchWeekAvailabilityController } from "./http/controllers/fetch-appoin
     FetchAppointmentsDayAvailabilityUseCase,
     FetchAppointmentsMonthAvailabilityUseCase,
     FetchAppointmentsWeekAvailabilityUseCase,
+    // EmailUseCase,
+    AuthenticateClientUseCase,
   ],
 })
 export class HttpModule {}

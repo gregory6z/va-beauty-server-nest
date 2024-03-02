@@ -29,6 +29,19 @@ model Appointment {
   @@map("appointments")
 }
 
+model User {
+  id String @id @default(uuid())
+
+  name      String?
+  email     String  @unique
+  telephone String?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
 model Service {
   id          String   @id @default(uuid())
   stripeId    String   @unique

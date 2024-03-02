@@ -3,9 +3,8 @@ import { ClientsRepository } from "@/domain/beauty-salon/repositories/client-rep
 
 export class InMemoryClientsRepository implements ClientsRepository {
   public items: Client[] = []
-
-  async findById(clientId: string) {
-    const client = this.items.find((item) => item.id.toString() === clientId)
+  async findByEmail(email: string) {
+    const client = this.items.find((item) => item.email === email)
 
     if (!client) {
       return null
