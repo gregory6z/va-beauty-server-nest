@@ -12,11 +12,16 @@ import { FetchAppointmentsMonthAvailabilityUseCase } from "@/domain/beauty-salon
 import { FetchMonthAvailabilityController } from "./http/controllers/fetch-appointment-month-availability"
 import { FetchAppointmentsWeekAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-week-availability"
 import { FetchWeekAvailabilityController } from "./http/controllers/fetch-appointment-week-availability"
-import { EmailUseCase } from "@/domain/beauty-salon/aplication/use-cases/email"
-import { AuthenticateController } from "./http/controllers/authenticate.controler"
 import { AuthenticateClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/authenticate-client"
 import { CryptographyModule } from "./cryptography/cryptography.module"
 import { AuthModule } from "./auth/auth.module"
+
+import { AuthControllerMagicLink } from "./auth/auth.controller"
+import { MagicLinkService } from "./email/magic-link.service"
+import { EmailService } from "./email/email.service"
+import { AuthService } from "./auth/auth.service"
+import { AuthController } from "./auth/authenticate.controller"
+import { MeuController } from "./http/controllers/email-envio.teste"
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, AuthModule],
@@ -27,10 +32,19 @@ import { AuthModule } from "./auth/auth.module"
     FetchDayAvailabilityController,
     FetchMonthAvailabilityController,
     FetchWeekAvailabilityController,
-    AuthenticateController,
+    AuthController,
+    AuthControllerMagicLink,
+
+    MeuController,
+
+    // AuthenticateController,
   ],
   providers: [
+    AuthService,
     StripeService,
+    MagicLinkService,
+    EmailService,
+
     CreateServiceUseCase,
     CreateAppointmentUseCase,
     FetchAppointmentsDayAvailabilityUseCase,

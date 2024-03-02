@@ -8,6 +8,10 @@ export class PrismaClientsMapper {
     return Client.create(
       {
         email: raw.email,
+        name: raw.name,
+        telephone: raw.telephone,
+        createdAt: raw.createdAt,
+        updatedAt: raw.updatedAt,
       },
       new UniqueEntityID(raw.id),
     )
@@ -16,8 +20,9 @@ export class PrismaClientsMapper {
   static toPrisma(client: Client): Prisma.UserUncheckedCreateInput {
     return {
       id: client.id.toString(),
+      name: client.name,
+      telephone: client.telephone,
       email: client.email,
-
       createdAt: client.createdAt,
       updatedAt: client.updatedAt,
     }

@@ -5,8 +5,8 @@ import dayjs from "dayjs"
 
 export interface ClientProps {
   email: string
-  name?: string
-  telephone?: string
+  name?: string | null
+  telephone?: string | null
   createdAt: Date
   updatedAt?: Date | null
 }

@@ -2,7 +2,6 @@ import { PrismaService } from "../prisma.service"
 import { Injectable } from "@nestjs/common"
 import { Client } from "@/domain/beauty-salon/enterprise/entities/client"
 
-import { DomainEvents } from "@/core/events/domain-events"
 import { ClientsRepository } from "@/domain/beauty-salon/repositories/client-repository"
 import { PrismaClientsMapper } from "../mappers/prisma-client-mapper"
 
@@ -20,17 +19,15 @@ export class PrismaClientsRepository implements ClientsRepository {
     if (!client) {
       return null
     }
-    console.log(client)
 
     return PrismaClientsMapper.toDomain(client)
   }
 
-  async create(user: Client): Promise<void> {
-    const data = PrismaClientsMapper.toPrisma(user)
+  async create(email: string): Promise<void> {
     await this.prisma.user.create({
-      data,
+      data: {
+        email,
+      },
     })
-
-    DomainEvents.dispatchEventsForAggregate(user.id)
   }
 }

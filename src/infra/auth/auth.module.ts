@@ -6,6 +6,9 @@ import { APP_GUARD } from "@nestjs/core"
 import { EnvService } from "../env/env.service"
 import { EnvModule } from "../env/env.module"
 import { JwtAuthGuard } from "./auth.guard"
+import { AuthService } from "./auth.service"
+import { MagicLinkService } from "../email/magic-link.service"
+import { EmailService } from "../email/email.service"
 
 @Module({
   imports: [
@@ -29,6 +32,9 @@ import { JwtAuthGuard } from "./auth.guard"
   providers: [
     JwtStrategy,
     EnvService,
+    AuthService,
+    MagicLinkService,
+    EmailService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
