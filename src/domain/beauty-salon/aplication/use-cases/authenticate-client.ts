@@ -1,18 +1,19 @@
-import { Injectable } from "@nestjs/common"
-import { Encrypter } from "../cryptography/encrypter"
+import { Either, left, right } from "@/core/either"
 import { WrongCredentialsError } from "./errors/wrong-credentials-error"
+import { Injectable } from "@nestjs/common"
 import { ClientsRepository } from "../../repositories/client-repository"
-import { MagicLinkService } from "@/infra/email/magic-link.service"
-import { Either, right } from "@/core/either"
+import { HashComparer } from "../cryptography/hash-comparer"
+import { Encrypter } from "../cryptography/encrypter"
 
 interface AuthenticateClientUseCaseRequest {
   email: string
+  password: string
 }
 
 type AuthenticateClientUseCaseResponse = Either<
   WrongCredentialsError,
   {
-    magicLink: string
+    accessToken: string
   }
 >
 
@@ -20,38 +21,35 @@ type AuthenticateClientUseCaseResponse = Either<
 export class AuthenticateClientUseCase {
   constructor(
     private clientsRepository: ClientsRepository,
+    private hashComparer: HashComparer,
     private encrypter: Encrypter,
-    private magicLinkService: MagicLinkService,
   ) {}
 
   async execute({
     email,
+    password,
   }: AuthenticateClientUseCaseRequest): Promise<AuthenticateClientUseCaseResponse> {
-    // authenticate user
-    let client = await this.clientsRepository.findByEmail(email)
+    const client = await this.clientsRepository.findByEmail(email)
 
-    // If new client or existing client
     if (!client) {
-      // Create new client
-      await this.clientsRepository.create(email)
-      client = await this.clientsRepository.findByEmail(email)
+      return left(new WrongCredentialsError())
     }
 
-    // Generate temporary token for identifying user
-    const temporaryToken = await this.encrypter.encrypt({
-      sub: client?.id.toString(),
-      // Add any other necessary claims
+    const isPasswordValid = await this.hashComparer.compare(
+      password,
+      client.password,
+    )
+
+    if (!isPasswordValid) {
+      return left(new WrongCredentialsError())
+    }
+
+    const accessToken = await this.encrypter.encrypt({
+      sub: client.id.toString(),
     })
 
-    // Generate magic link with the temporary token
-    const magicLink = this.magicLinkService.generateMagicLink(temporaryToken)
-
-    // Send Magic Link to user's email
-    await this.magicLinkService.sendMagicLink(email, magicLink)
-
-    // Return response with magic link sent
     return right({
-      magicLink,
+      accessToken,
     })
   }
 }

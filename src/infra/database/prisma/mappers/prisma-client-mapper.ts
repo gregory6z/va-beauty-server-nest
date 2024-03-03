@@ -9,9 +9,8 @@ export class PrismaClientsMapper {
       {
         email: raw.email,
         name: raw.name,
+        password: raw.password,
         telephone: raw.telephone,
-        createdAt: raw.createdAt,
-        updatedAt: raw.updatedAt,
       },
       new UniqueEntityID(raw.id),
     )
@@ -23,8 +22,7 @@ export class PrismaClientsMapper {
       name: client.name,
       telephone: client.telephone,
       email: client.email,
-      createdAt: client.createdAt,
-      updatedAt: client.updatedAt,
+      password: client.password,
     }
   }
 }

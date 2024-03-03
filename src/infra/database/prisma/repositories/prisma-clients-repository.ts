@@ -23,11 +23,10 @@ export class PrismaClientsRepository implements ClientsRepository {
     return PrismaClientsMapper.toDomain(client)
   }
 
-  async create(email: string): Promise<void> {
+  async create(client: Client): Promise<void> {
+    const data = PrismaClientsMapper.toPrisma(client)
     await this.prisma.user.create({
-      data: {
-        email,
-      },
+      data,
     })
   }
 }
