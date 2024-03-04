@@ -21,6 +21,8 @@ import { EmailService } from "./email/email.service"
 import { MeuController } from "./http/controllers/email-envio.teste"
 import { AuthenticateClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/authenticate-client"
 import { RegisterClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/register-client"
+import { CreateAccountController } from "./http/controllers/create-account.controller"
+import { AuthenticateController } from "./http/controllers/authenticate.controller"
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, AuthModule],
@@ -31,6 +33,8 @@ import { RegisterClientUseCase } from "@/domain/beauty-salon/aplication/use-case
     FetchDayAvailabilityController,
     FetchMonthAvailabilityController,
     FetchWeekAvailabilityController,
+    CreateAccountController,
+    AuthenticateController,
 
     MeuController,
 

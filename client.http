@@ -57,7 +57,26 @@ POST {{baseUrl}}/sessions
 Content-Type: application/json
 
 {
-  "email": "gregoryteste@rocketseat.com.br"
+  "email": "gregory"
+}
+
+###
+POST {{baseUrl}}/sessions
+Content-Type: application/json
+
+{
+  "email": "gregoryrag@gmail.com",
+  "password":"1234"
+}
+###
+
+POST {{baseUrl}}/accounts
+Content-Type: application/json
+
+{
+  "email": "gregoryrag@gmail.com",
+  "name": "gregory",
+  "password": "1234"
 }
 
 ###
