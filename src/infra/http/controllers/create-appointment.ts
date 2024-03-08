@@ -30,7 +30,9 @@ export class CreateAppointmentController {
     @Body(bodyValidationPipe)
     body: CreateAppointmentBodySchema,
   ) {
-    const { servicesIds, date, clientId } = body
+    const { servicesIds, date } = body
+
+    const clientId = request.user.sub
 
     console.log(request.user)
 

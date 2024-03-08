@@ -2,6 +2,7 @@ import {
   FetchAppointmentsWeekAvailabilityUseCase,
   WeekAvailability,
 } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-week-availability"
+import { Public } from "@/infra/auth/public"
 import { Controller, Get } from "@nestjs/common"
 
 @Controller("week-availability")
@@ -11,6 +12,7 @@ export class FetchWeekAvailabilityController {
   ) {}
 
   @Get()
+  @Public()
   async getWeekAvailability(): Promise<WeekAvailability[]> {
     const result = await this.fetchAppointmentsWeekAvailabilityUseCase.execute()
 
