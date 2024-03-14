@@ -47,7 +47,6 @@ describe("Create Appointment (E2E)", () => {
       .post("/appointments")
       // .set("Authorization", `Bearer ${accessToken}`)
       .send({
-        clientId: "client-id",
         servicesIds: [service1.stripeId, service2.stripeId],
         date: new Date(2025, 3, 26, 12, 0, 0),
       })

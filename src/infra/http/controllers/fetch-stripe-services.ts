@@ -1,11 +1,13 @@
 // stripe.controller.ts
 import { StripeService } from "@/infra/stripe/stripe.service"
 import { Controller, Get } from "@nestjs/common"
+import { Public } from "@/infra/auth/public"
 
 @Controller("/stripe")
 export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
+  @Public()
   @Get("sync-services")
   async syncServices(): Promise<any> {
     try {
