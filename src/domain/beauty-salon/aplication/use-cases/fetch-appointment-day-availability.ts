@@ -56,11 +56,16 @@ export class FetchAppointmentsDayAvailabilityUseCase {
         return allMinutes
       })
 
+      // array for comparison of available schedules
+
+      const arrays: number[][] = []
+
       const StartOfService = 480
       // 8 hours
       const EndOfService = 1080
       // 18 hours
       const startTimes: number[] = ConversionOfDatesToMinutes
+
       const slotTime = 15
 
       // break time
@@ -72,10 +77,6 @@ export class FetchAppointmentsDayAvailabilityUseCase {
         (_, index) => BreakTime + index * slotTime,
       )
 
-      // array for comparison of available schedules
-
-      const arrays: number[][] = []
-
       for (const startTime of startTimes) {
         const newArray = Array.from(
           { length: Math.ceil(durationOfService / slotTime) },
@@ -83,6 +84,7 @@ export class FetchAppointmentsDayAvailabilityUseCase {
         )
         arrays.push(newArray)
       }
+
       const arrayToSort = (a, b) => a - b
 
       const arrayOfAppointments: number[] = ([] as number[])

@@ -25,6 +25,15 @@ Authorization: Bearer {{token}}
 
 ###
 
+###
+# @name create_appointment
+GET {{baseUrl}}/appointments
+
+
+
+
+###
+
 
 # @name fecth-week-availability
 GET {{baseUrl}}/week-availability

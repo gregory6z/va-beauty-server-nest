@@ -2,6 +2,7 @@ import { BadRequestException, Controller, Get, Query } from "@nestjs/common"
 import { z } from "zod"
 import { ZodValidationPipe } from "../pipes/zod-validation.pipe"
 import { FetchAppointmentsDayAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-day-availability"
+import { Public } from "@/infra/auth/public"
 
 const pageQueryParamSchema = z.string().transform(Number)
 
@@ -15,6 +16,7 @@ export class FetchDayAvailabilityController {
     private fetchDayAvailability: FetchAppointmentsDayAvailabilityUseCase,
   ) {}
 
+  @Public()
   @Get()
   async handle(
     @Query("day", queryValidationPipe) day: PageQueryParamSchema,

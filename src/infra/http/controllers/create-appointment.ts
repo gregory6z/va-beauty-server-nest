@@ -37,8 +37,6 @@ export class CreateAppointmentController {
 
     const clientId = user.sub
 
-    console.log(user.sub)
-
     const result = await this.createAppointment.execute({
       clientId,
       date,

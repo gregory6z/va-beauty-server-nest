@@ -85,4 +85,33 @@ describe("Fetch appointment week availability", () => {
     expect(result.isLeft()).toBe(true)
     // Adicione as expectativas adicionais com base no comportamento esperado do seu caso de uso
   })
+  it("should reflect new appointments in the availability", async () => {
+    const service1 = makeService()
+    const service2 = makeService()
+    // Primeiro, execute o método sem o novo agendamento
+    let result = await sut.execute()
+
+    // Verifique a disponibilidade inicial
+    expect(result.isLeft()).toBe(false)
+    const initialAvailability = result.value
+    expect(initialAvailability).toEqual(expect.any(Array))
+
+    // Agora, adicione um novo agendamento
+    const newAppointment = makeAppointment({
+      date: new Date(Date.UTC(2025, 3, 26, 7, 0, 0)), // Segunda-feira
+      servicesIds: [service1.stripeId.toString(), service2.stripeId.toString()],
+    })
+    inMemoryAppointmentRepository.items.push(newAppointment)
+
+    // Execute o método novamente
+    result = await sut.execute()
+
+    // Verifique a nova disponibilidade
+    expect(result.isLeft()).toBe(false)
+    const newAvailability = result.value
+    expect(newAvailability).toEqual(expect.any(Array))
+
+    // A disponibilidade deve ter mudado
+    expect(newAvailability).not.toEqual(initialAvailability)
+  })
 })

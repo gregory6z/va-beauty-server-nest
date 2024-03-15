@@ -16,8 +16,6 @@ export class FetchWeekAvailabilityController {
   async getWeekAvailability(): Promise<WeekAvailability[]> {
     const result = await this.fetchAppointmentsWeekAvailabilityUseCase.execute()
 
-    console.log(result)
-
     if (result.isRight()) {
       return result.value
     } else {
