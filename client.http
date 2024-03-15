@@ -27,7 +27,8 @@ Authorization: Bearer {{token}}
 
 ###
 # @name create_appointment
-GET {{baseUrl}}/appointments
+GET {{baseUrl}}/week-availability?date=2025-03-15
+Content-Type: application/json
 
 
 
@@ -36,7 +37,7 @@ GET {{baseUrl}}/appointments
 
 
 # @name fecth-week-availability
-GET {{baseUrl}}/week-availability
+GET {{baseUrl}}/day-availability?day=15&month=3&year=2024
 Content-Type: application/json
 
 

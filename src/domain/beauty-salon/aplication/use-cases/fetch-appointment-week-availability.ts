@@ -5,14 +5,13 @@ import { isAfter, setSeconds } from "date-fns"
 import * as dayjs from "dayjs"
 import { ServicesRepository } from "../../repositories/services-repository"
 
-// Constantes
-const NUMBER_OF_WEEKS = 26 // 6 meses
-const NUMBER_OF_DAYS_IN_WEEK = 7
-const START_OF_SERVICE = 480 // 8 horas
-const END_OF_SERVICE = 1080 // 18 horas
-const SLOT_TIME = 15 // slots de 15 minutos
-const BREAK_TIME = 720 // 12 horas
-const DURATION_BREAK_TIME = 60 // duração do intervalo (em minutos)
+const NUMBER_OF_WEEKS = 20 // 6 months
+const NUMBER_OF_DAYS_IN_WEEK = 7 // days
+const START_OF_SERVICE = 480 // 8 heures
+const END_OF_SERVICE = 1080 // 18 heures
+const SLOT_TIME = 15 // slots  15 minutes
+const BREAK_TIME = 720 // 12 h
+const DURATION_BREAK_TIME = 60 // min
 
 interface FetchWeekAvailabilityUseCaseError {
   message: string
@@ -39,16 +38,10 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
     private servicesRepository: ServicesRepository,
   ) {}
 
-  // Função para buscar compromissos
-  private async fetchAppointments(currentDate: dayjs.Dayjs) {
-    return await this.appointmentsRepository.findAvailableDayTimeSlots({
-      day: currentDate.date(),
-      month: currentDate.month() + 1,
-      year: currentDate.year(),
-    })
+  private async fetchAppointments() {
+    return await this.appointmentsRepository.findFutureAppointments()
   }
 
-  // Função para calcular a duração do serviço
   private async calculateServiceDuration(appointments) {
     const services = appointments.map(({ services }) => services).flat()
     return await this.servicesRepository.findManyServicesAndCalculateDuration(
@@ -56,7 +49,6 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
     )
   }
 
-  // Função para extrair os horários de início
   private extractStartTimes(appointments) {
     return appointments.map(({ date }) => {
       const hours = dayjs(date).hour()
@@ -65,7 +57,6 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
     })
   }
 
-  // Função para construir o array de compromissos
   private buildArrayOfAppointments(startTimes, durationOfService) {
     const arrays: number[][] = []
 
@@ -88,7 +79,6 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
       .sort((a, b) => a - b)
   }
 
-  // Função para construir os slots de tempo
   private buildTimeSlots(currentDate, arrayOfAppointments) {
     const numberOfArray = (END_OF_SERVICE - START_OF_SERVICE) / SLOT_TIME
     const eachMinuteArray = Array.from(
@@ -120,6 +110,8 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
       const weekAvailability: WeekAvailability[] = []
       const today = dayjs()
 
+      const allAppointments = await this.fetchAppointments()
+
       for (let week = 0; week < NUMBER_OF_WEEKS; week++) {
         for (let day = 0; day < NUMBER_OF_DAYS_IN_WEEK; day++) {
           const currentDate = today.add(
@@ -127,14 +119,18 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
             "day",
           )
 
-          const appointments = await this.fetchAppointments(currentDate)
+          const appointmentsForDay = allAppointments.filter((appointment) =>
+            dayjs(appointment.date).isSame(currentDate, "day"),
+          )
+
           const durationOfService =
-            await this.calculateServiceDuration(appointments)
-          const startTimes = this.extractStartTimes(appointments)
+            await this.calculateServiceDuration(appointmentsForDay)
+          const startTimes = this.extractStartTimes(appointmentsForDay)
           const arrayOfAppointments = this.buildArrayOfAppointments(
             startTimes,
             durationOfService,
           )
+
           const timeSlots = this.buildTimeSlots(
             currentDate,
             arrayOfAppointments,
@@ -148,7 +144,6 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
     } catch (error) {
       return left({
         message: "Erro ao buscar a disponibilidade semanal.",
-        error,
       })
     }
   }

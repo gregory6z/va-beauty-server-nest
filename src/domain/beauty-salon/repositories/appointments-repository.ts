@@ -19,6 +19,8 @@ export abstract class AppointmentsRepository {
     year,
   }: findAvailableDayTimeSlotsProps): Promise<Appointment[]>
 
+  abstract findFutureAppointments(): Promise<Appointment[]>
+
   abstract findAvailableMonthTimeSlots({
     month,
     year,

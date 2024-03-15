@@ -12,6 +12,17 @@ import { DomainEvents } from "@/core/events/domain-events"
 @Injectable()
 export class PrismaAppointmentsRepository implements AppointmentsRepository {
   constructor(private prisma: PrismaService) {}
+  async findFutureAppointments(): Promise<Appointment[]> {
+    const futureAppointments = await this.prisma.appointment.findMany({
+      where: {
+        date: {
+          gte: new Date(),
+        },
+      },
+    })
+    return futureAppointments.map(PrismaAppointmentsMapper.toDomain)
+  }
+
   async create(appointment: Appointment): Promise<void> {
     const data = PrismaAppointmentsMapper.toPrisma(appointment)
     await this.prisma.appointment.create({

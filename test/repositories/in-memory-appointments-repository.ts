@@ -44,6 +44,15 @@ export class InMemoryAppointmentRepository implements AppointmentsRepository {
     return filteredAppointments
   }
 
+  async findFutureAppointments(): Promise<Appointment[]> {
+    const now = new Date()
+    const futureAppointments = this.items.filter((appointment) => {
+      return appointment.date > now
+    })
+
+    return futureAppointments
+  }
+
   async findAvailableMonthTimeSlots({
     month,
     year,
