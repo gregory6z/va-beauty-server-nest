@@ -1,12 +1,22 @@
 import { Appointment } from "@/domain/beauty-salon/enterprise/entities/appointment"
 import {
   AppointmentsRepository,
+  UpdateAppointmentProps,
   findAvailableDayTimeSlotsProps,
   findAvailableMonthTimeSlotsProps,
 } from "@/domain/beauty-salon/repositories/appointments-repository"
 
 export class InMemoryAppointmentRepository implements AppointmentsRepository {
   public items: Appointment[] = []
+
+  async update({ appointmentId, date }: UpdateAppointmentProps): Promise<void> {
+    const appointment = this.items.find(
+      (a) => a.id.toString() === appointmentId,
+    )
+    if (appointment) {
+      appointment.date = date
+    }
+  }
 
   async findById(appointmentId: string) {
     const client = this.items.find(

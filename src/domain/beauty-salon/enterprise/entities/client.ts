@@ -15,16 +15,32 @@ export class Client extends Entity<ClientProps> {
     return this.props.email
   }
 
+  set email(value: string) {
+    this.props.email = value
+  }
+
   get password() {
     return this.props.password
+  }
+
+  set password(value: string) {
+    this.props.password = value
   }
 
   get name() {
     return this.props.name
   }
 
+  set name(value: string) {
+    this.props.name = value
+  }
+
   get telephone() {
-    return this.props.telephone
+    return this.props.telephone ?? ""
+  }
+
+  set telephone(value: string) {
+    this.props.telephone = value
   }
 
   get appointments() {

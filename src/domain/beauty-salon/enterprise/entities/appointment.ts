@@ -14,16 +14,21 @@ export interface AppointmentProps {
 }
 
 export class Appointment extends Entity<AppointmentProps> {
-  get clientId() {
-    return this.props.clientId
-  }
-
   get services() {
     return this.props.servicesIds
   }
 
+  get clientId() {
+    return this.props.clientId
+  }
+
   get date() {
     return this.props.date
+  }
+
+  set date(newDate: Date) {
+    this.props.date = newDate
+    this.props.updatedAt = new Date()
   }
 
   get createdAt() {

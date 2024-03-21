@@ -17,6 +17,7 @@ export function makeClient(
       name: faker.person.fullName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
+      telephone: faker.phone.number(),
       ...override,
     },
     id,

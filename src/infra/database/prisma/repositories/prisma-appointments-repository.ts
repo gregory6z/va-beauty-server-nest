@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common"
 import { Appointment } from "@/domain/beauty-salon/enterprise/entities/appointment"
 import {
   AppointmentsRepository,
+  UpdateAppointmentProps,
   findAvailableDayTimeSlotsProps,
   findAvailableMonthTimeSlotsProps,
 } from "@/domain/beauty-salon/repositories/appointments-repository"
@@ -12,16 +13,6 @@ import { DomainEvents } from "@/core/events/domain-events"
 @Injectable()
 export class PrismaAppointmentsRepository implements AppointmentsRepository {
   constructor(private prisma: PrismaService) {}
-  async findFutureAppointments(): Promise<Appointment[]> {
-    const futureAppointments = await this.prisma.appointment.findMany({
-      where: {
-        date: {
-          gte: new Date(),
-        },
-      },
-    })
-    return futureAppointments.map(PrismaAppointmentsMapper.toDomain)
-  }
 
   async create(appointment: Appointment): Promise<void> {
     const data = PrismaAppointmentsMapper.toPrisma(appointment)
@@ -38,6 +29,32 @@ export class PrismaAppointmentsRepository implements AppointmentsRepository {
     })
 
     DomainEvents.dispatchEventsForAggregate(appointment.id)
+  }
+
+  async update({ appointmentId, date }: UpdateAppointmentProps): Promise<void> {
+    await this.prisma.appointment.findUnique({
+      where: { id: appointmentId },
+    })
+
+    await this.prisma.appointment.update({
+      where: {
+        id: appointmentId,
+      },
+      data: {
+        date,
+      },
+    })
+  }
+
+  async findFutureAppointments(): Promise<Appointment[]> {
+    const futureAppointments = await this.prisma.appointment.findMany({
+      where: {
+        date: {
+          gte: new Date(),
+        },
+      },
+    })
+    return futureAppointments.map(PrismaAppointmentsMapper.toDomain)
   }
 
   async findById(appointmentId: string): Promise<Appointment | null> {
