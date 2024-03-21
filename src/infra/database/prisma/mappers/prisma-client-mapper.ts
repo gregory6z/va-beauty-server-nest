@@ -1,16 +1,28 @@
 import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { User as PrismaClient, Prisma } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 
 import { Client } from "@/domain/beauty-salon/enterprise/entities/client"
+import { PrismaAppointmentsMapper } from "./prisma-appointments-mapper"
+
+type PrismaClient = Prisma.UserGetPayload<{
+  include: {
+    appointments: true
+  }
+}>
 
 export class PrismaClientsMapper {
   static toDomain(raw: PrismaClient): Client {
+    const appointments = raw.appointments?.map((appointment) =>
+      PrismaAppointmentsMapper.toDomain(appointment),
+    )
+
     return Client.create(
       {
         email: raw.email,
         name: raw.name,
         password: raw.password,
         telephone: raw.telephone,
+        appointments,
       },
       new UniqueEntityID(raw.id),
     )
@@ -23,6 +35,13 @@ export class PrismaClientsMapper {
       telephone: client.telephone,
       email: client.email,
       password: client.password,
+      appointments: {
+        create: client.appointments
+          ? client.appointments.map((appointment) =>
+              PrismaAppointmentsMapper.toPrisma(appointment),
+            )
+          : [],
+      },
     }
   }
 }

@@ -26,7 +26,15 @@ export class PrismaAppointmentsRepository implements AppointmentsRepository {
   async create(appointment: Appointment): Promise<void> {
     const data = PrismaAppointmentsMapper.toPrisma(appointment)
     await this.prisma.appointment.create({
-      data,
+      data: {
+        ...data,
+        User: {
+          connect: {
+            id: appointment.clientId,
+          },
+        },
+        userId: undefined, // Set userId to undefined
+      },
     })
 
     DomainEvents.dispatchEventsForAggregate(appointment.id)

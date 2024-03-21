@@ -14,6 +14,26 @@ export class PrismaClientsRepository implements ClientsRepository {
       where: {
         email,
       },
+      include: {
+        appointments: true,
+      },
+    })
+
+    if (!client) {
+      return null
+    }
+
+    return PrismaClientsMapper.toDomain(client)
+  }
+
+  async findById(id: string): Promise<Client | null> {
+    const client = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        appointments: true,
+      },
     })
 
     if (!client) {

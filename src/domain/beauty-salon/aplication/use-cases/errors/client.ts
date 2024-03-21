@@ -5,3 +5,9 @@ export class ClientAlreadyExistsError extends Error implements UseCaseError {
     super(`Le client "${identifier}" existe déjà.`)
   }
 }
+
+export class FetchClientError extends Error implements UseCaseError {
+  constructor() {
+    super(`client not exist`)
+  }
+}

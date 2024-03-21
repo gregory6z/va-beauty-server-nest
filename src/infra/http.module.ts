@@ -23,6 +23,8 @@ import { AuthenticateClientUseCase } from "@/domain/beauty-salon/aplication/use-
 import { RegisterClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/register-client"
 import { CreateAccountController } from "./http/controllers/create-account.controller"
 import { AuthenticateController } from "./http/controllers/authenticate.controller"
+import { FetchClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-client"
+import { FetchClientController } from "./http/controllers/fetch-client"
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, AuthModule],
@@ -35,6 +37,7 @@ import { AuthenticateController } from "./http/controllers/authenticate.controll
     FetchWeekAvailabilityController,
     CreateAccountController,
     AuthenticateController,
+    FetchClientController,
 
     MeuController,
 
@@ -46,6 +49,8 @@ import { AuthenticateController } from "./http/controllers/authenticate.controll
     EmailService,
     AuthenticateClientUseCase,
     RegisterClientUseCase,
+
+    FetchClientUseCase,
 
     CreateServiceUseCase,
     CreateAppointmentUseCase,

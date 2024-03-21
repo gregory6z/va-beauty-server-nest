@@ -26,12 +26,10 @@ Authorization: Bearer {{token}}
 ###
 
 ###
-# @name create_appointment
-GET {{baseUrl}}/week-availability?date=2025-03-15
+# @name  FetchClient
+GET {{baseUrl}}/client?user=27469d56-ef07-4636-9a09-8aa04671f33f
 Content-Type: application/json
-
-
-
+Authorization: Bearer {{token}}
 
 ###
 
