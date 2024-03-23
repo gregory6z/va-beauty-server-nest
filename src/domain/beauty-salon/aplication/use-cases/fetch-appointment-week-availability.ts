@@ -43,9 +43,12 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
   }
 
   private async calculateServiceDuration(appointments) {
-    const services = appointments.map(({ services }) => services).flat()
+    const servicesIds = appointments
+      .map((appointment) => appointment.servicesIds)
+      .flat()
+
     return await this.servicesRepository.findManyServicesAndCalculateDuration(
-      services,
+      servicesIds,
     )
   }
 
@@ -142,6 +145,7 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
 
       return right(weekAvailability)
     } catch (error) {
+      console.log(error)
       return left({
         message: "Erro ao buscar a disponibilidade semanal.",
       })

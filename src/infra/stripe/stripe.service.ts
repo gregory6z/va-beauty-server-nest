@@ -36,6 +36,9 @@ export class StripeService {
               description: stripeService.description || "",
               duration: Number(stripeService.metadata.duration),
               price: Number(price.unit_amount),
+              sessions: Number(stripeService.metadata.sessions),
+              interval: Number(stripeService.metadata.interval),
+              isSubscription: Boolean(stripeService.metadata.isSubscription),
               imgUrl: stripeService.images,
               category: stripeService.metadata.category,
               // Mapeie as outras propriedades do serviço conforme necessário
@@ -50,6 +53,9 @@ export class StripeService {
                 description: service.description,
                 price: Number(service.price) || 10,
                 duration: service.duration,
+                sessions: service.sessions,
+                interval: service.interval,
+                isSubscription: service.isSubscription,
                 slug: service.slug,
                 imgUrl: service.imgUrl,
                 // Mapeie outras propriedades do banco de dados conforme necessário

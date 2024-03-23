@@ -8,10 +8,10 @@ import {
 
 import { z } from "zod"
 import { ZodValidationPipe } from "../pipes/zod-validation.pipe"
-import { CreateAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cases/create-appointent"
 import { UserPayload } from "@/infra/auth/jwt.strategy"
 import { CurrentUser } from "@/infra/auth/current-user-decorator"
 import { AuthGuard } from "@nestjs/passport"
+import { CreateAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cases/create-appointent"
 
 const createAppointmentBodySchema = z.object({
   servicesIds: z.array(z.string()),

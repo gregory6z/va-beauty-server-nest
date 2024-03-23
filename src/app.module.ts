@@ -5,7 +5,6 @@ import { envSchema } from "./infra/env/env"
 import { EnvModule } from "./infra/env/env.module"
 import { HttpModule } from "./infra/http.module"
 import { StripeNestModule } from "./infra/stripe/stripe.module"
-import { CryptographyModule } from "./infra/cryptography/cryptography.module"
 
 @Module({
   imports: [

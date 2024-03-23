@@ -99,10 +99,12 @@ export class CreateAppointmentUseCase {
       0,
     )
 
-    appointmentDate = addMinutes(
-      appointmentDate,
-      totalDurationNonSubscriptionServices,
-    )
+    if (subscriptionServices && subscriptionServices.length > 0) {
+      appointmentDate = addMinutes(
+        appointmentDate,
+        totalDurationNonSubscriptionServices,
+      )
+    }
 
     const appointment = Appointment.create({
       clientId,
