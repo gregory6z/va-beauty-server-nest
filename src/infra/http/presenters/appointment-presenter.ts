@@ -5,7 +5,7 @@ export class AppointmentPresenter {
     return {
       id: appointment.id.toString(),
       date: appointment.date,
-      services: appointment.services,
+      services: appointment.servicesIds,
       createdAt: appointment.createdAt,
       updatedAt: appointment.updatedAt,
     }

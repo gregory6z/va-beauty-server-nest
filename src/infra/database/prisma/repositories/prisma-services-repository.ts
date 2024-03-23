@@ -32,19 +32,16 @@ export class PrismaServicesRepository implements ServicesRepository {
     DomainEvents.dispatchEventsForAggregate(service.id)
   }
 
-  async findManyByServiceId(services: string[]): Promise<string[]> {
-    const matchingIds = await this.prisma.service.findMany({
+  async findManyByServiceId(servicesIds: string[]): Promise<Service[]> {
+    const matchingServices = await this.prisma.service.findMany({
       where: {
         stripeId: {
-          in: services,
+          in: servicesIds,
         },
-      },
-      select: {
-        stripeId: true,
       },
     })
 
-    return matchingIds.map((service) => service.stripeId.toString())
+    return matchingServices.map(PrismaServicesMapper.toDomain)
   }
 
   async findManyServices(): Promise<Service[]> {

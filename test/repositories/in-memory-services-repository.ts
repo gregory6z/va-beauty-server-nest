@@ -18,18 +18,39 @@ export class InMemoryServiceRepository implements ServicesRepository {
     return totalDuration
   }
 
+  // async findManyServicesAndCalculateDuration(
+  //   servicesIds: string[],
+  // ): Promise<{ totalSubscriptionDuration: number, totalNormalServiceDuration: number }> {
+  //   const matchingServices = this.items.filter((service) =>
+  //     servicesIds.includes(service.id.toString()),
+  //   )
+
+  //   let totalSubscriptionDuration = 0;
+  //   let totalNormalServiceDuration = 0;
+
+  //   for (const service of matchingServices) {
+  //     if (service.isSubscription) {
+  //       // Se o serviço for uma inscrição, adicione a duração à duração total de inscrições
+  //       totalSubscriptionDuration += service.duration;
+  //     } else {
+  //       // Se o serviço for um serviço normal, adicione a duração à duração total de serviços normais
+  //       totalNormalServiceDuration += service.duration;
+  //     }
+  //   }
+
+  //   return { totalSubscriptionDuration, totalNormalServiceDuration };
+  // }
+
   async findManyServices(): Promise<Service[]> {
     return this.items
   }
 
-  async findManyByServiceId(servicesIds: string[]): Promise<string[]> {
-    // this.items.map((service) => service.id.toString())
-
-    const matchingIds = servicesIds.filter((id) =>
-      this.items.some((service) => id === service.id.toString()),
+  async findManyByServiceId(servicesIds: string[]): Promise<Service[]> {
+    const matchingServices = this.items.filter((service) =>
+      servicesIds.includes(service.id.toString()),
     )
 
-    return matchingIds
+    return matchingServices
   }
 
   async findByName(name: string) {

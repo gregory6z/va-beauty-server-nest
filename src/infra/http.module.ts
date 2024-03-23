@@ -6,7 +6,6 @@ import { StripeController } from "./http/controllers/fetch-stripe-services"
 import { StripeService } from "./stripe/stripe.service"
 import { CreateAppointmentController } from "./http/controllers/create-appointment"
 import { CreateServiceController } from "./http/controllers/create-service"
-import { FetchDayAvailabilityController } from "./http/controllers/fetch-appointment-day-availability"
 import { FetchAppointmentsDayAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-day-availability"
 import { FetchAppointmentsMonthAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-month-availability"
 import { FetchMonthAvailabilityController } from "./http/controllers/fetch-appointment-month-availability"
@@ -18,13 +17,15 @@ import { AuthModule } from "./auth/auth.module"
 import { MagicLinkService } from "./email/magic-link.service"
 import { EmailService } from "./email/email.service"
 
-import { MeuController } from "./http/controllers/email-envio.teste"
 import { AuthenticateClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/authenticate-client"
 import { RegisterClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/register-client"
 import { CreateAccountController } from "./http/controllers/create-account.controller"
 import { AuthenticateController } from "./http/controllers/authenticate.controller"
 import { FetchClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-client"
 import { FetchClientController } from "./http/controllers/fetch-client"
+import { EditClientController } from "./http/controllers/edit-client.controller"
+import { EditClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/edit-client"
+import { EditAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cases/edit-date-appointment"
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, AuthModule],
@@ -32,14 +33,12 @@ import { FetchClientController } from "./http/controllers/fetch-client"
     StripeController,
     CreateAppointmentController,
     CreateServiceController,
-    FetchDayAvailabilityController,
     FetchMonthAvailabilityController,
     FetchWeekAvailabilityController,
     CreateAccountController,
     AuthenticateController,
     FetchClientController,
-
-    MeuController,
+    EditClientController,
 
     // AuthenticateController,
   ],
@@ -49,6 +48,8 @@ import { FetchClientController } from "./http/controllers/fetch-client"
     EmailService,
     AuthenticateClientUseCase,
     RegisterClientUseCase,
+    EditClientUseCase,
+    EditAppointmentUseCase,
 
     FetchClientUseCase,
 

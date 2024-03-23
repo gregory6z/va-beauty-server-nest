@@ -1,44 +1,45 @@
 import { ClientsRepository } from "@/domain/beauty-salon/repositories/client-repository"
-import { Either, left } from "@/core/either"
+import { Either, left, right } from "@/core/either"
 import { Injectable } from "@nestjs/common"
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error"
 import { Client } from "../../enterprise/entities/client"
 
 interface EditClientUseCaseRequest {
   clientId: string
-  name: string
-  telephone: string
-  password: string
-  email: string
+  name?: string
+  telephone?: string
+  password?: string
+  email?: string
 }
 
-type EditClientUseCaseResponse = Either<NotAllowedError, void>
+type EditClientUseCaseResponse = Either<
+  NotAllowedError,
+  {
+    client: Client
+  }
+>
 
 @Injectable()
 export class EditClientUseCase {
   constructor(private clientRepository: ClientsRepository) {}
 
-  async execute({
-    clientId,
-    name,
-    telephone,
-    password,
-    email,
-  }: EditClientUseCaseRequest): Promise<EditClientUseCaseResponse | void> {
-    const client = await this.clientRepository.findById(clientId)
+  async execute(
+    request: EditClientUseCaseRequest,
+  ): Promise<EditClientUseCaseResponse> {
+    const client = await this.clientRepository.findById(request.clientId)
 
     if (!client) {
-      console.log("Client not found")
-      return
+      return left(new NotAllowedError())
     }
 
-    client.name = name
-    client.telephone = telephone
-    client.password = password
-    client.email = email
+    Object.assign(client, request)
 
     console.log(client)
 
     await this.clientRepository.update(client)
+
+    return right({
+      client,
+    })
   }
 }

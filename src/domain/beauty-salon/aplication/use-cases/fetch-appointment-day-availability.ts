@@ -6,9 +6,7 @@ import dayjs from "dayjs"
 import { ServicesRepository } from "../../repositories/services-repository"
 
 interface FetchAppointmentsDayAvailabilityUseCaseRequest {
-  day: number
-  month: number
-  year: number
+  date: Date
 }
 
 interface FetchAppointmentsDayAvailabilityUseCaseError {
@@ -28,11 +26,13 @@ export class FetchAppointmentsDayAvailabilityUseCase {
   ) {}
 
   async execute({
-    day,
-    month,
-    year,
+    date,
   }: FetchAppointmentsDayAvailabilityUseCaseRequest): Promise<FetchAppointmentsDayAvailabilityUseCaseResponse> {
     try {
+      const day = date.getDate()
+      const month = date.getMonth() + 1 // getMonth() retorna um valor de 0 (janeiro) a 11 (dezembro), então adicionamos 1 para obter o mês correto.
+      const year = date.getFullYear()
+
       const appointments =
         await this.appointmentsRepository.findAvailableDayTimeSlots({
           day,
@@ -40,7 +40,9 @@ export class FetchAppointmentsDayAvailabilityUseCase {
           year,
         })
 
-      const someServices = appointments.map(({ services }) => services).flat()
+      const someServices = appointments
+        .map(({ servicesIds }) => servicesIds)
+        .flat()
 
       const durationOfService =
         await this.servicesRepository.findManyServicesAndCalculateDuration(

@@ -21,6 +21,10 @@ export class PrismaServicesMapper {
 
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
+
+        isSubscription: raw.isSubscription,
+        sessions: raw.sessions,
+        interval: raw.interval,
       },
       new UniqueEntityID(raw.id),
     )
@@ -29,12 +33,17 @@ export class PrismaServicesMapper {
   static toPrisma(service: Service): Prisma.ServiceUncheckedCreateInput {
     return {
       id: service.id.toString(),
+
       name: service.name,
       category: service.category,
       slug: service.slug,
       price: service.price,
       imgUrl: service.imgUrl,
       stripeId: service.stripeId,
+
+      isSubscription: service.isSubscription,
+      sessions: service.sessions,
+      interval: service.interval,
 
       duration: service.duration,
       description: service.description,

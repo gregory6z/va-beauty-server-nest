@@ -46,15 +46,20 @@ model User {
 }
 
 model Service {
-  id          String   @id @default(uuid())
-  stripeId    String   @unique
-  name        String   @unique
+  id          String @id @default(uuid())
+  stripeId    String @unique
+  name        String @unique
   description String
   slug        String
   category    String
-  price       Int
-  duration    Int
-  imgUrl      String[] @map("img_url")
+
+  isSubscription Boolean? @default(false) @map("is_subscription")
+  sessions       Int?
+  interval       Int?
+
+  price    Int
+  duration Int
+  imgUrl   String[] @map("img_url")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")

@@ -14,6 +14,10 @@ export interface ServiceProps {
   duration: number
   imgUrl: string[]
 
+  isSubscription?: boolean | null
+  sessions?: number | null
+  interval?: number | null
+
   createdAt: Date
   updatedAt?: Date | null
 }
@@ -21,6 +25,18 @@ export interface ServiceProps {
 export class Service extends Entity<ServiceProps> {
   get name() {
     return this.props.name
+  }
+
+  get isSubscription() {
+    return this.props.isSubscription
+  }
+
+  get sessions() {
+    return this.props.sessions
+  }
+
+  get interval() {
+    return this.props.interval
   }
 
   get stripeId() {

@@ -2,10 +2,7 @@ import { PrismaService } from "../prisma.service"
 import { Injectable } from "@nestjs/common"
 import { Client } from "@/domain/beauty-salon/enterprise/entities/client"
 
-import {
-  ClientsRepository,
-  EditClientProps,
-} from "@/domain/beauty-salon/repositories/client-repository"
+import { ClientsRepository } from "@/domain/beauty-salon/repositories/client-repository"
 import { PrismaClientsMapper } from "../mappers/prisma-client-mapper"
 
 @Injectable()
@@ -13,11 +10,16 @@ export class PrismaClientsRepository implements ClientsRepository {
   constructor(private prisma: PrismaService) {}
 
   async update(client: Client): Promise<void> {
+    const data = PrismaClientsMapper.toPrisma(client)
+    console.log(data)
     await this.prisma.user.update({
-      where: {
-        id: client.id.toString(),
+      where: { id: client.id.toString() },
+      data: {
+        name: data.name,
+        email: data.email,
+        telephone: data.telephone,
+        password: data.password,
       },
-      data: PrismaClientsMapper.toPrisma(client),
     })
   }
 

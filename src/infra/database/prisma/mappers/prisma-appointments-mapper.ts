@@ -10,6 +10,7 @@ export class PrismaAppointmentsMapper {
         clientId: raw.clientId,
         date: raw.date,
         servicesIds: raw.servicesIds,
+
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
       },
@@ -24,8 +25,8 @@ export class PrismaAppointmentsMapper {
       id: appointment.id.toString(),
 
       date: appointment.date,
-      clientId: appointment.clientId.toString(),
-      servicesIds: appointment.services,
+      clientId: appointment.clientId,
+      servicesIds: appointment.servicesIds,
 
       createdAt: appointment.createdAt,
       updatedAt: appointment.updatedAt,
