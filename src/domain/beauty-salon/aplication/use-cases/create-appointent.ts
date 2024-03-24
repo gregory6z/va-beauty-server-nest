@@ -62,35 +62,48 @@ export class CreateAppointmentUseCase {
 
     let currentAppointmentDate = appointmentDate
 
-    // Criar compromissos para serviços de inscrição
     for (const service of subscriptionServices) {
-      for (let i = 0; i < (service.sessions ?? 0); i++) {
-        // Adicione o intervalo do serviço à data do compromisso
-        if (service.interval !== undefined && service.interval !== null) {
-          currentAppointmentDate = addDays(
-            currentAppointmentDate,
-            service.interval,
+      // Verifique se service.sessions e service.stripeId existem antes de entrar no loop
+      if (
+        service.sessions &&
+        service.stripeId &&
+        service.stripeId.trim() !== ""
+      ) {
+        for (let i = 0; i < service.sessions; i++) {
+          // Adicione o intervalo do serviço à data do compromisso após a criação do primeiro compromisso
+          if (i > 0 && service.interval) {
+            currentAppointmentDate = addDays(
+              currentAppointmentDate,
+              service.interval,
+            )
+          }
+
+          let availability = await this.fetchAppointmentDayAvailability.execute(
+            {
+              date: currentAppointmentDate,
+            },
           )
-        }
 
-        let availability = await this.fetchAppointmentDayAvailability.execute({
-          date: currentAppointmentDate,
-        })
+          while (!availability) {
+            currentAppointmentDate = addMinutes(currentAppointmentDate, 15)
+            availability = await this.fetchAppointmentDayAvailability.execute({
+              date: currentAppointmentDate,
+            })
+          }
 
-        while (!availability) {
+          if (service.stripeId && service.stripeId.trim() !== "") {
+            const appointment = Appointment.create({
+              clientId,
+              date: currentAppointmentDate,
+              servicesIds: [service.stripeId],
+            })
+
+            await this.appointmentsRepository.create(appointment)
+          }
+
+          // Adicione tempo extra após a criação do compromisso para evitar a criação de vários compromissos no mesmo horário
           currentAppointmentDate = addMinutes(currentAppointmentDate, 15)
-          availability = await this.fetchAppointmentDayAvailability.execute({
-            date: currentAppointmentDate,
-          })
         }
-
-        const appointment = Appointment.create({
-          clientId,
-          date,
-          servicesIds: [service.stripeId],
-        })
-
-        await this.appointmentsRepository.create(appointment)
       }
     }
 
