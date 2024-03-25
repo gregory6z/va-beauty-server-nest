@@ -48,6 +48,7 @@ export class AuthenticateClientUseCase {
       sub: client.id.toString(),
       email: client.email,
       name: client.name,
+      telephone: client.telephone,
     })
 
     return right({

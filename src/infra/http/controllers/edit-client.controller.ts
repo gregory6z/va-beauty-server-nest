@@ -19,10 +19,7 @@ type EditClientBodySchema = z.infer<typeof editClientBodySchema>
 
 @Controller("/client")
 export class EditClientController {
-  constructor(
-    private editClient: EditClientUseCase,
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private editClient: EditClientUseCase) {}
 
   @Put()
   async handle(
@@ -30,6 +27,7 @@ export class EditClientController {
     @CurrentUser() user: UserPayload,
   ) {
     const { name, password, telephone, email } = body
+
     const clientId = user.sub
 
     const result = await this.editClient.execute({
@@ -44,17 +42,10 @@ export class EditClientController {
       throw new BadRequestException()
     }
 
-    const updatedUser = result.value
+    const { accessToken } = result.value
 
-    const newJwt = this.jwtService.sign({
-      name: updatedUser.client.name,
-      email: updatedUser.client.email,
-      telephone: updatedUser.client.telephone,
-    })
-
-    console.log(newJwt)
-
-    // Retorne o novo JWT
-    return { accessToken: newJwt }
+    return {
+      accessToken,
+    }
   }
 }

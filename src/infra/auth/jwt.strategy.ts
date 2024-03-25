@@ -8,6 +8,7 @@ const tokenPayloadSchema = z.object({
   sub: z.string().uuid(),
   name: z.string(),
   email: z.string().email(),
+  telephone: z.string(),
 })
 
 export type UserPayload = z.infer<typeof tokenPayloadSchema>

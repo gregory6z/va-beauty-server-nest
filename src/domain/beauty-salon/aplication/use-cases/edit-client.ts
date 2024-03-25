@@ -2,7 +2,8 @@ import { ClientsRepository } from "@/domain/beauty-salon/repositories/client-rep
 import { Either, left, right } from "@/core/either"
 import { Injectable } from "@nestjs/common"
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error"
-import { Client } from "../../enterprise/entities/client"
+import { Encrypter } from "../cryptography/encrypter"
+import { HashGenerator } from "../cryptography/hash-generator"
 
 interface EditClientUseCaseRequest {
   clientId: string
@@ -15,13 +16,17 @@ interface EditClientUseCaseRequest {
 type EditClientUseCaseResponse = Either<
   NotAllowedError,
   {
-    client: Client
+    accessToken: string
   }
 >
 
 @Injectable()
 export class EditClientUseCase {
-  constructor(private clientRepository: ClientsRepository) {}
+  constructor(
+    private clientRepository: ClientsRepository,
+    private encrypter: Encrypter,
+    private hashGenerator: HashGenerator,
+  ) {}
 
   async execute(
     request: EditClientUseCaseRequest,
@@ -32,14 +37,24 @@ export class EditClientUseCase {
       return left(new NotAllowedError())
     }
 
-    Object.assign(client, request)
+    if (request.password) {
+      const hashedPassword = await this.hashGenerator.hash(request.password)
+      request.password = hashedPassword
+    }
 
-    console.log(client)
+    Object.assign(client, request)
 
     await this.clientRepository.update(client)
 
+    const accessToken = await this.encrypter.encrypt({
+      sub: client.id.toString(),
+      email: client.email,
+      name: client.name,
+      telephone: client.telephone,
+    })
+
     return right({
-      client,
+      accessToken,
     })
   }
 }
