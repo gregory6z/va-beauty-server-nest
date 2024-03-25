@@ -21,7 +21,7 @@ Content-Type: application/json
 
 {
   "email": "gregoryrag@gmail.com",
-  "password":"1234"
+  "password":"12345"
 }
 
 
@@ -63,6 +63,13 @@ Authorization: Bearer {{authToken}}
 GET {{baseUrl}}/day-availability?day=15&month=3&year=2024
 Content-Type: application/json
 
+
+###
+
+# @name  fetch-appointment-by-client
+GET {{baseUrl}}/fetch-appointments
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 ###
 

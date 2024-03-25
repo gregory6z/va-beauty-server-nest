@@ -1,3 +1,4 @@
+import { FetchAppointmentByClientController } from "./http/controllers/fetch-appointment-by-client"
 import { CreateServiceUseCase } from "./../domain/beauty-salon/aplication/use-cases/create-service"
 import { Module } from "@nestjs/common"
 import { DatabaseModule } from "./database/database.module"
@@ -26,6 +27,7 @@ import { EditClientController } from "./http/controllers/edit-client.controller"
 import { EditClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/edit-client"
 import { EditAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cases/edit-date-appointment"
 import { CreateAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cases/create-appointent"
+import { FetchAppointmentByClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointments-by-client"
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, AuthModule],
@@ -39,6 +41,7 @@ import { CreateAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-c
     AuthenticateController,
     FetchClientController,
     EditClientController,
+    FetchAppointmentByClientController,
 
     // AuthenticateController,
   ],
@@ -52,6 +55,7 @@ import { CreateAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-c
     EditAppointmentUseCase,
 
     FetchClientUseCase,
+    FetchAppointmentByClientUseCase,
 
     CreateServiceUseCase,
     CreateAppointmentUseCase,

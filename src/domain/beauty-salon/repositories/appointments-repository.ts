@@ -17,7 +17,12 @@ export interface findAvailableMonthTimeSlotsProps {
 
 export abstract class AppointmentsRepository {
   abstract create(appointment: Appointment): Promise<void>
-  abstract update(props: UpdateAppointmentProps): Promise<void> // Adicione este método
+  abstract update(props: UpdateAppointmentProps): Promise<void>
+
+  abstract findManyAppointmentsByUserId(
+    clientId: string,
+  ): Promise<Appointment[]>
+
   abstract findById(appointmentId: string): Promise<Appointment | null>
   abstract findAvailableDayTimeSlots({
     day,

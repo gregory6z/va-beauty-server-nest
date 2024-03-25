@@ -15,20 +15,20 @@ export class PrismaAppointmentsRepository implements AppointmentsRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(appointment: Appointment): Promise<void> {
-    const data = PrismaAppointmentsMapper.toPrisma(appointment)
+    const { clientId, date, servicesIds } = appointment
+
     await this.prisma.appointment.create({
       data: {
-        ...data,
+        date,
+        servicesIds,
+        clientId,
         User: {
           connect: {
-            id: appointment.clientId,
+            id: clientId,
           },
         },
-        userId: undefined, // Set userId to undefined
       },
     })
-
-    DomainEvents.dispatchEventsForAggregate(appointment.id)
   }
 
   async update({ appointmentId, date }: UpdateAppointmentProps): Promise<void> {
@@ -91,6 +91,16 @@ export class PrismaAppointmentsRepository implements AppointmentsRepository {
       console.error("Erro ao buscar slots de tempo disponíveis:", error)
       throw error
     }
+  }
+
+  async findManyAppointmentsByUserId(clientId: string): Promise<Appointment[]> {
+    const appointments = await this.prisma.appointment.findMany({
+      where: {
+        clientId,
+      },
+    })
+
+    return appointments.map(PrismaAppointmentsMapper.toDomain)
   }
 
   async findAvailableMonthTimeSlots({

@@ -4,7 +4,6 @@ import { UserPayload } from "@/infra/auth/jwt.strategy"
 import { z } from "zod"
 import { EditClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/edit-client"
 import { ZodValidationPipe } from "../pipes/zod-validation.pipe"
-import { JwtService } from "@nestjs/jwt"
 
 const editClientBodySchema = z.object({
   name: z.string().optional(),
