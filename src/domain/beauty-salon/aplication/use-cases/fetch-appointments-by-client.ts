@@ -41,14 +41,22 @@ export class FetchAppointmentByClientUseCase {
           appointment.servicesIds,
         )
 
+        const duration =
+          await this.ServicesRepository.findManyServicesAndCalculateDuration(
+            appointment.servicesIds,
+          )
+
         const date = new Date(appointment.date)
+
         const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getFullYear()}`
 
         return {
           appointmentId: appointment.id.toString(),
           services: services.map((service) => service.name),
+          duration,
           isSubscription: appointment.isSubscription,
           date: formattedDate,
+          dateTime: date,
           time: `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`,
           createdAt: appointment.createdAt,
           updatedAt: appointment.updatedAt,
@@ -57,38 +65,29 @@ export class FetchAppointmentByClientUseCase {
       }),
     )
 
-    function parseDate(dateString) {
-      const [day, month, year] = dateString.split("/")
-      return new Date(year, month - 1, day)
-    }
+    newAppointment.sort((a, b) => a.dateTime.getTime() - b.dateTime.getTime())
 
     const subscriptions = newAppointment
       .filter(
         (appointment) =>
-          appointment.isSubscription &&
-          appointment.services.length > 0 &&
-          parseDate(appointment.date) > new Date(),
+          appointment.isSubscription && appointment.dateTime > new Date(),
       )
-      .sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime())
       .slice(0, 4)
 
     const nonSubscriptions = newAppointment.filter(
-      (appointment) => !appointment.isSubscription,
+      (appointment) =>
+        !appointment.isSubscription && appointment.dateTime > new Date(),
     )
 
     const sortedAppointments = [...subscriptions, ...nonSubscriptions].sort(
-      (a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime(),
+      (a, b) => a.dateTime.getTime() - b.dateTime.getTime(),
     )
 
-    const futureAppointments = sortedAppointments.filter(
-      (appointment) => parseDate(appointment.date) > new Date(),
-    )
+    const futureAppointments = sortedAppointments
 
     const pastAppointments = newAppointment
-      .filter((appointment) => new Date(appointment.date) <= new Date())
-      .sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime())
-
-    console.log(futureAppointments)
+      .filter((appointment) => appointment.dateTime <= new Date())
+      .sort((a, b) => b.dateTime.getTime() - a.dateTime.getTime())
 
     return right({
       futureAppointments,

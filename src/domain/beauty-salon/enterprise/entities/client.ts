@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 import { Entity } from "@/core/entities/entity"
 import { UniqueEntityID } from "@/core/entities/unique-entity-id"
 import { Appointment } from "./appointment"
@@ -8,11 +9,16 @@ export interface ClientProps {
   password: string
   telephone?: string | null
   appointments?: Appointment[]
+  customerId?: string | null
 }
 
 export class Client extends Entity<ClientProps> {
   get email() {
     return this.props.email
+  }
+
+  get customerId() {
+    return this.props.customerId
   }
 
   set email(value: string) {

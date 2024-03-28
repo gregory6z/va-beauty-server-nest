@@ -6,6 +6,8 @@ export interface AppointmentWithServicesDetailsProps {
   appointmentId: string
   services: string[]
   isSubscription: boolean
+  duration: number
+  dateTime: Date
   time: string
   date: string
   createdAt: Date
@@ -15,6 +17,14 @@ export interface AppointmentWithServicesDetailsProps {
 export class AppointmentWithServicesDetails extends ValueObject<AppointmentWithServicesDetailsProps> {
   get appointmentId() {
     return this.props.appointmentId
+  }
+
+  get duration() {
+    return this.props.duration
+  }
+
+  get dateTime() {
+    return this.props.dateTime
   }
 
   get isSubscription() {

@@ -42,6 +42,8 @@ model User {
   password  String
   telephone String?
 
+  customerId String? @unique @map("customer_id")
+
   appointments Appointment[]
 
   @@map("users")

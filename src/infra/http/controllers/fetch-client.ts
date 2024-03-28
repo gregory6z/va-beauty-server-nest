@@ -16,8 +16,6 @@ export class FetchClientController {
       id: user,
     })
 
-    console.log(result.value)
-
     if (result.isLeft()) {
       throw new BadRequestException("invalid input")
     }

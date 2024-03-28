@@ -11,7 +11,6 @@ export class PrismaClientsRepository implements ClientsRepository {
 
   async update(client: Client): Promise<void> {
     const data = PrismaClientsMapper.toPrisma(client)
-    console.log(data)
     await this.prisma.user.update({
       where: { id: client.id.toString() },
       data: {

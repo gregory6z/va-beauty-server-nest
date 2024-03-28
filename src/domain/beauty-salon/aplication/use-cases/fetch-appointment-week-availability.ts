@@ -165,7 +165,6 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
 
       return right(weekAvailability)
     } catch (error) {
-      console.log(error)
       return left({
         message: "Erro ao buscar a disponibilidade semanal.",
       })

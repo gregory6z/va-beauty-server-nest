@@ -23,6 +23,7 @@ export class PrismaClientsMapper {
         password: raw.password,
         telephone: raw.telephone,
         appointments,
+        customerId: raw.customerId,
       },
       new UniqueEntityID(raw.id),
     )
@@ -35,6 +36,7 @@ export class PrismaClientsMapper {
       telephone: client.telephone,
       email: client.email,
       password: client.password,
+      customerId: client.customerId,
       appointments: {
         create: client.appointments
           ? client.appointments.map((appointment) =>
