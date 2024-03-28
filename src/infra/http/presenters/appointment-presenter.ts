@@ -6,6 +6,7 @@ export class AppointmentPresenter {
       id: appointment.id.toString(),
       date: appointment.date,
       services: appointment.servicesIds,
+      isSubscription: appointment.isSubscription,
       createdAt: appointment.createdAt,
       updatedAt: appointment.updatedAt,
     }

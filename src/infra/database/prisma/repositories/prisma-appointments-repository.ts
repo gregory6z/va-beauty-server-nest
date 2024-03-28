@@ -8,20 +8,20 @@ import {
   findAvailableMonthTimeSlotsProps,
 } from "@/domain/beauty-salon/repositories/appointments-repository"
 import { PrismaAppointmentsMapper } from "../mappers/prisma-appointments-mapper"
-import { DomainEvents } from "@/core/events/domain-events"
 
 @Injectable()
 export class PrismaAppointmentsRepository implements AppointmentsRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(appointment: Appointment): Promise<void> {
-    const { clientId, date, servicesIds } = appointment
+    const { clientId, date, servicesIds, isSubscription } = appointment
 
     await this.prisma.appointment.create({
       data: {
         date,
         servicesIds,
         clientId,
+        isSubscription,
         User: {
           connect: {
             id: clientId,

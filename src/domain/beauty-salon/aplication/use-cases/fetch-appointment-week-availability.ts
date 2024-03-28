@@ -1,9 +1,10 @@
 import { Either, left, right } from "@/core/either"
 import { Injectable } from "@nestjs/common"
 import { AppointmentsRepository } from "../../repositories/appointments-repository"
-import { isAfter, setSeconds } from "date-fns"
+import { getMinutes, isAfter, setSeconds } from "date-fns"
 import * as dayjs from "dayjs"
 import { ServicesRepository } from "../../repositories/services-repository"
+import { Appointment } from "../../enterprise/entities/appointment"
 
 const NUMBER_OF_WEEKS = 20 // 6 months
 const NUMBER_OF_DAYS_IN_WEEK = 7 // days
@@ -106,6 +107,25 @@ export class FetchAppointmentsWeekAvailabilityUseCase {
         available: !hasAppointmentInMinute && isAfter(compareDate, new Date()),
       }
     })
+  }
+
+  public async isAppointmentAvailable(date: Date): Promise<boolean> {
+    const appointmentMinute = date.getMinutes()
+
+    const appointments =
+      await this.appointmentsRepository.findAvailableDayTimeSlots({
+        day: date.getDate(),
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+      })
+
+    const hasAppointmentInMinute = appointments.find(
+      (appointment) => getMinutes(appointment.date) === appointmentMinute,
+    )
+
+    const isAvailable = hasAppointmentInMinute === undefined
+
+    return isAvailable
   }
 
   async execute(): Promise<FetchWeekAvailabilityUseCaseResponse> {

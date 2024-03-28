@@ -9,6 +9,8 @@ export interface AppointmentProps {
 
   servicesIds: string[]
 
+  isSubscription: boolean
+
   createdAt: Date
   updatedAt?: Date | null
 }
@@ -16,6 +18,10 @@ export interface AppointmentProps {
 export class Appointment extends Entity<AppointmentProps> {
   get clientId() {
     return this.props.clientId
+  }
+
+  get isSubscription() {
+    return this.props.isSubscription
   }
 
   get servicesIds() {

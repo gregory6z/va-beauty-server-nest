@@ -21,6 +21,8 @@ model Appointment {
   clientId String
   date     DateTime
 
+  isSubscription Boolean @default(false) @map("is_subscription")
+
   servicesIds String[]
 
   createdAt DateTime  @default(now()) @map("created_at")

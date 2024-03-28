@@ -9,7 +9,7 @@ import { AppointmentsRepository } from "../../repositories/appointments-reposito
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error"
 import { Service } from "../../enterprise/entities/service"
 import { Appointment } from "../../enterprise/entities/appointment"
-import { FetchAppointmentsDayAvailabilityUseCase } from "./fetch-appointment-day-availability"
+import { CheckAppointmentAvailabilityUseCase } from "./check-appointmentAvailabilityUseCase"
 
 interface CreateAppointmentUseCaseRequest {
   clientId: string
@@ -24,7 +24,7 @@ export class CreateAppointmentUseCase {
   constructor(
     private appointmentsRepository: AppointmentsRepository,
     private servicesRepository: ServicesRepository,
-    private fetchAppointmentDayAvailability: FetchAppointmentsDayAvailabilityUseCase,
+    private checkAppointmentAvailabilityUseCase: CheckAppointmentAvailabilityUseCase,
   ) {}
 
   async execute({
@@ -63,14 +63,12 @@ export class CreateAppointmentUseCase {
     let currentAppointmentDate = appointmentDate
 
     for (const service of subscriptionServices) {
-      // Verifique se service.sessions e service.stripeId existem antes de entrar no loop
       if (
         service.sessions &&
         service.stripeId &&
         service.stripeId.trim() !== ""
       ) {
         for (let i = 0; i < service.sessions; i++) {
-          // Adicione o intervalo do serviço à data do compromisso após a criação do primeiro compromisso
           if (i > 0 && service.interval) {
             currentAppointmentDate = addDays(
               currentAppointmentDate,
@@ -78,31 +76,29 @@ export class CreateAppointmentUseCase {
             )
           }
 
-          let availability = await this.fetchAppointmentDayAvailability.execute(
-            {
-              date: currentAppointmentDate,
-            },
-          )
+          let appointmentAvailability =
+            await this.checkAppointmentAvailabilityUseCase.execute(
+              currentAppointmentDate,
+            )
 
-          while (!availability) {
+          while (!appointmentAvailability) {
+            // Se não estiver disponível, adicione 15 minutos à data do compromisso e tente novamente
             currentAppointmentDate = addMinutes(currentAppointmentDate, 15)
-            availability = await this.fetchAppointmentDayAvailability.execute({
-              date: currentAppointmentDate,
-            })
+            appointmentAvailability =
+              await this.checkAppointmentAvailabilityUseCase.execute(
+                currentAppointmentDate,
+              )
           }
 
-          if (service.stripeId && service.stripeId.trim() !== "") {
-            const appointment = Appointment.create({
-              clientId,
-              date: currentAppointmentDate,
-              servicesIds: [service.stripeId],
-            })
+          // Se a disponibilidade for true, crie o compromisso
+          const appointment = Appointment.create({
+            clientId,
+            date: currentAppointmentDate,
+            servicesIds: [service.stripeId],
+            isSubscription: true,
+          })
 
-            await this.appointmentsRepository.create(appointment)
-          }
-
-          // Adicione tempo extra após a criação do compromisso para evitar a criação de vários compromissos no mesmo horário
-          currentAppointmentDate = addMinutes(currentAppointmentDate, 15)
+          await this.appointmentsRepository.create(appointment)
         }
       }
     }
@@ -123,6 +119,7 @@ export class CreateAppointmentUseCase {
       clientId,
       date: appointmentDate,
       servicesIds: nonSubscriptionServices.map((service) => service.stripeId),
+      isSubscription: false,
     })
 
     await this.appointmentsRepository.create(appointment)

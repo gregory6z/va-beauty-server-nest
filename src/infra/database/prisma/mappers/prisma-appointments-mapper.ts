@@ -11,6 +11,8 @@ export class PrismaAppointmentsMapper {
         date: raw.date,
         servicesIds: raw.servicesIds,
 
+        isSubscription: raw.isSubscription,
+
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
       },
@@ -27,6 +29,8 @@ export class PrismaAppointmentsMapper {
       date: appointment.date,
       clientId: appointment.clientId,
       servicesIds: appointment.servicesIds,
+
+      isSubscription: appointment.isSubscription,
 
       createdAt: appointment.createdAt,
       updatedAt: appointment.updatedAt,

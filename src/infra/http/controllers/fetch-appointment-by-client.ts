@@ -22,10 +22,12 @@ export class FetchAppointmentByClientController {
       return new BadRequestException()
     }
 
-    const { appointments } = result.value
+    const { futureAppointments, pastAppointments, subscriptions } = result.value
 
     return {
-      appointments,
+      futureAppointments,
+      pastAppointments,
+      subscriptions,
     }
   }
 }

@@ -6,7 +6,6 @@ import { StripeController } from "./http/controllers/fetch-stripe-services"
 import { StripeService } from "./stripe/stripe.service"
 import { CreateAppointmentController } from "./http/controllers/create-appointment"
 import { CreateServiceController } from "./http/controllers/create-service"
-import { FetchAppointmentsDayAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-day-availability"
 import { FetchAppointmentsMonthAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-month-availability"
 import { FetchMonthAvailabilityController } from "./http/controllers/fetch-appointment-month-availability"
 import { FetchAppointmentsWeekAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointment-week-availability"
@@ -28,6 +27,7 @@ import { EditClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/ed
 import { EditAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cases/edit-date-appointment"
 import { CreateAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cases/create-appointent"
 import { FetchAppointmentByClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointments-by-client"
+import { CheckAppointmentAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/check-appointmentAvailabilityUseCase"
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, AuthModule],
@@ -59,7 +59,9 @@ import { FetchAppointmentByClientUseCase } from "@/domain/beauty-salon/aplicatio
 
     CreateServiceUseCase,
     CreateAppointmentUseCase,
-    FetchAppointmentsDayAvailabilityUseCase,
+
+    CheckAppointmentAvailabilityUseCase,
+
     FetchAppointmentsMonthAvailabilityUseCase,
     FetchAppointmentsWeekAvailabilityUseCase,
     // EmailUseCase,
