@@ -1,6 +1,4 @@
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
 import { ValueObject } from "@/core/entities/value-object"
-import dayjs from "dayjs"
 
 export interface AppointmentWithServicesDetailsProps {
   appointmentId: string

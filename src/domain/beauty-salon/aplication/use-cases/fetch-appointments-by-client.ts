@@ -4,6 +4,7 @@ import { Appointment } from "../../enterprise/entities/appointment"
 import { BadRequestException, Injectable } from "@nestjs/common"
 import { AppointmentsRepository } from "../../repositories/appointments-repository"
 import { AppointmentWithServicesDetails } from "../../enterprise/entities/value-objects/appointmentsWithServicesDetail"
+import { Subscription } from "../../enterprise/entities/subscription"
 
 interface FetchAppointmentsByClientUseCaseRequest {
   clientId: string
@@ -14,7 +15,7 @@ type FetchAppointmentByClientResponse = Either<
   {
     futureAppointments: AppointmentWithServicesDetails[]
     pastAppointments: AppointmentWithServicesDetails[]
-    subscriptions: AppointmentWithServicesDetails[]
+    // subscriptions: Subscription[]
   }
 >
 
@@ -67,7 +68,7 @@ export class FetchAppointmentByClientUseCase {
 
     newAppointment.sort((a, b) => a.dateTime.getTime() - b.dateTime.getTime())
 
-    const subscriptions = newAppointment
+    const subscriptionsArray = newAppointment
       .filter(
         (appointment) =>
           appointment.isSubscription && appointment.dateTime > new Date(),
@@ -79,9 +80,10 @@ export class FetchAppointmentByClientUseCase {
         !appointment.isSubscription && appointment.dateTime > new Date(),
     )
 
-    const sortedAppointments = [...subscriptions, ...nonSubscriptions].sort(
-      (a, b) => a.dateTime.getTime() - b.dateTime.getTime(),
-    )
+    const sortedAppointments = [
+      ...subscriptionsArray,
+      ...nonSubscriptions,
+    ].sort((a, b) => a.dateTime.getTime() - b.dateTime.getTime())
 
     const futureAppointments = sortedAppointments
 
@@ -89,10 +91,28 @@ export class FetchAppointmentByClientUseCase {
       .filter((appointment) => appointment.dateTime <= new Date())
       .sort((a, b) => b.dateTime.getTime() - a.dateTime.getTime())
 
+    console.log(subscriptionsArray)
+
+    // const newSubscriptions = subscriptionsArray.map((appointment) => {
+    //   return {
+    //     status: true,
+    //     clientId,
+    //     subscriptionServiceId: appointment.services[0],
+    //     nextAppointmentDate: String(appointment[0].date || ""),
+    //     nextAppointmentTime: String(appointment[0].time || ""),
+    //   }
+    // })
+
+    // const subscriptions = newSubscriptions.map((subscription) =>
+    //   Subscription.create(subscription),
+    // )
+
+    // console.log(subscriptions)
+
     return right({
       futureAppointments,
       pastAppointments,
-      subscriptions,
+      // subscriptions,
     })
   }
 }

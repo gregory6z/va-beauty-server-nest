@@ -6,6 +6,7 @@ export interface EditClientProps {
   email?: string
   telephone?: string
   password?: string
+  customerId?: string
 }
 
 export abstract class ClientsRepository {

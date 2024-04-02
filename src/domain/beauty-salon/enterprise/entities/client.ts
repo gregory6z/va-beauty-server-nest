@@ -13,16 +13,20 @@ export interface ClientProps {
 }
 
 export class Client extends Entity<ClientProps> {
+  get customerId() {
+    return this.props.customerId ?? ""
+  }
+
   get email() {
     return this.props.email
   }
 
-  get customerId() {
-    return this.props.customerId
-  }
-
   set email(value: string) {
     this.props.email = value
+  }
+
+  set customerId(value: string) {
+    this.props.customerId = value
   }
 
   get password() {

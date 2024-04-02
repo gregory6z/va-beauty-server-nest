@@ -10,6 +10,7 @@ const editClientBodySchema = z.object({
   password: z.string().optional(),
   telephone: z.string().optional(),
   email: z.string().email().optional(),
+  customerId: z.string().optional(),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(editClientBodySchema)
@@ -25,12 +26,13 @@ export class EditClientController {
     @Body(bodyValidationPipe) body: EditClientBodySchema,
     @CurrentUser() user: UserPayload,
   ) {
-    const { name, password, telephone, email } = body
+    const { name, password, telephone, email, customerId } = body
 
     const clientId = user.sub
 
     const result = await this.editClient.execute({
       clientId,
+      customerId,
       name,
       password,
       telephone,

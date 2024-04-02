@@ -4,7 +4,6 @@ import { AppointmentsRepository } from "../../repositories/appointments-reposito
 import { getMinutes, isAfter, setSeconds } from "date-fns"
 import * as dayjs from "dayjs"
 import { ServicesRepository } from "../../repositories/services-repository"
-import { Appointment } from "../../enterprise/entities/appointment"
 
 const NUMBER_OF_WEEKS = 20 // 6 months
 const NUMBER_OF_DAYS_IN_WEEK = 7 // days

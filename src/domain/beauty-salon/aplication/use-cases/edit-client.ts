@@ -11,6 +11,7 @@ interface EditClientUseCaseRequest {
   telephone?: string
   password?: string
   email?: string
+  customerId?: string
 }
 
 type EditClientUseCaseResponse = Either<
@@ -42,7 +43,21 @@ export class EditClientUseCase {
       request.password = hashedPassword
     }
 
-    Object.assign(client, request)
+    if (request.email) {
+      client.email = request.email
+    }
+
+    if (request.name) {
+      client.name = request.name
+    }
+
+    if (request.telephone) {
+      client.telephone = request.telephone
+    }
+
+    if (request.customerId) {
+      client.customerId = request.customerId
+    }
 
     await this.clientRepository.update(client)
 
@@ -51,6 +66,7 @@ export class EditClientUseCase {
       email: client.email,
       name: client.name,
       telephone: client.telephone,
+      customerId: client.customerId,
     })
 
     return right({

@@ -28,6 +28,7 @@ import { EditAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cas
 import { CreateAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cases/create-appointent"
 import { FetchAppointmentByClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointments-by-client"
 import { CheckAppointmentAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/check-appointmentAvailabilityUseCase"
+import { EditAppointmentController } from "./http/controllers/edit-appointment.controller"
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, AuthModule],
@@ -41,6 +42,7 @@ import { CheckAppointmentAvailabilityUseCase } from "@/domain/beauty-salon/aplic
     AuthenticateController,
     FetchClientController,
     EditClientController,
+    EditAppointmentController,
     FetchAppointmentByClientController,
 
     // AuthenticateController,

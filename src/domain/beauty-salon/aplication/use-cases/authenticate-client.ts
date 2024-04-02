@@ -49,6 +49,7 @@ export class AuthenticateClientUseCase {
       email: client.email,
       name: client.name,
       telephone: client.telephone,
+      customerId: client.customerId,
     })
 
     return right({

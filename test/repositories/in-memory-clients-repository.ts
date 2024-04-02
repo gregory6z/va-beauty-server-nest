@@ -1,4 +1,3 @@
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
 import { Client } from "@/domain/beauty-salon/enterprise/entities/client"
 import { ClientsRepository } from "@/domain/beauty-salon/repositories/client-repository"
 
