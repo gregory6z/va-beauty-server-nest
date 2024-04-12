@@ -46,5 +46,11 @@ export class CreateAppointmentController {
     if (result.isLeft()) {
       throw new BadRequestException("invalid input")
     }
+
+    console.log(result)
+
+    return {
+      message: "ok",
+    }
   }
 }

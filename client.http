@@ -21,7 +21,7 @@ Content-Type: application/json
 
 {
   "email": "gregoryrag@gmail.com",
-  "password":"12345"
+  "password":"1234"
 }
 
 
@@ -35,6 +35,17 @@ Authorization: Bearer {{authToken}}
 {
   "date": "2025-04-26T12:00:00",
   "servicesIds": ["prod_Pn25odJUwaSahO"]
+}
+
+###
+
+# @name delete_subscription
+DELETE {{baseUrl}}/delete-subscription
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "stripeId": "prod_Pn25odJUwaSahO"
 }
 
 ###

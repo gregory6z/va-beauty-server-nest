@@ -9,6 +9,20 @@ import {
 export class InMemoryAppointmentRepository implements AppointmentsRepository {
   public items: Appointment[] = []
 
+  async delete(appointmentId: string): Promise<void> {
+    this.items = this.items.filter(
+      (appointment) => appointment.id.toString() !== appointmentId,
+    )
+    return Promise.resolve()
+  }
+
+  async findByClientId(clientId: string): Promise<Appointment[]> {
+    const clientAppointments = this.items.filter(
+      (appointment) => appointment.clientId === clientId,
+    )
+    return Promise.resolve(clientAppointments)
+  }
+
   async update({ appointmentId, date }: UpdateAppointmentProps): Promise<void> {
     const appointment = this.items.find(
       (a) => a.id.toString() === appointmentId,

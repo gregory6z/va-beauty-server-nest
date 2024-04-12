@@ -13,6 +13,23 @@ import { PrismaAppointmentsMapper } from "../mappers/prisma-appointments-mapper"
 export class PrismaAppointmentsRepository implements AppointmentsRepository {
   constructor(private prisma: PrismaService) {}
 
+  async delete(appointmentId: string): Promise<void> {
+    await this.prisma.appointment.delete({
+      where: {
+        id: appointmentId,
+      },
+    })
+  }
+
+  async findByClientId(clientId: string): Promise<Appointment[]> {
+    const appointments = await this.prisma.appointment.findMany({
+      where: {
+        clientId,
+      },
+    })
+    return appointments.map(PrismaAppointmentsMapper.toDomain)
+  }
+
   async create(appointment: Appointment): Promise<void> {
     const { clientId, date, servicesIds, isSubscription } = appointment
 
@@ -20,8 +37,8 @@ export class PrismaAppointmentsRepository implements AppointmentsRepository {
       data: {
         date,
         servicesIds,
-        clientId,
         isSubscription,
+
         User: {
           connect: {
             id: clientId,

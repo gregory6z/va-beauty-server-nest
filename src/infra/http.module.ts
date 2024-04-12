@@ -29,6 +29,8 @@ import { CreateAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-c
 import { FetchAppointmentByClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/fetch-appointments-by-client"
 import { CheckAppointmentAvailabilityUseCase } from "@/domain/beauty-salon/aplication/use-cases/check-appointmentAvailabilityUseCase"
 import { EditAppointmentController } from "./http/controllers/edit-appointment.controller"
+import { DeleteSubscriptionUseCase } from "@/domain/beauty-salon/aplication/use-cases/delete-subscriptions"
+import { DeleteSubscriptionController } from "./http/controllers/delete-subscriptions.controller"
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, AuthModule],
@@ -44,6 +46,7 @@ import { EditAppointmentController } from "./http/controllers/edit-appointment.c
     EditClientController,
     EditAppointmentController,
     FetchAppointmentByClientController,
+    DeleteSubscriptionController,
 
     // AuthenticateController,
   ],
@@ -55,6 +58,7 @@ import { EditAppointmentController } from "./http/controllers/edit-appointment.c
     RegisterClientUseCase,
     EditClientUseCase,
     EditAppointmentUseCase,
+    DeleteSubscriptionUseCase,
 
     FetchClientUseCase,
     FetchAppointmentByClientUseCase,
