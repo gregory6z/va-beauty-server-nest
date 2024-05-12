@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "nest build",
   "builds:": [
     {
       "src": "src/main.ts",
