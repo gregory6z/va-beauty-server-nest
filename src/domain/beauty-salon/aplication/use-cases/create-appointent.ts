@@ -17,7 +17,7 @@ interface CreateAppointmentUseCaseRequest {
   date: Date
 }
 
-type CreateAppointmentUseCaseResponse = Either<NotAllowedError, void>
+type CreateAppointmentUseCaseResponse = Either<NotAllowedError, Appointment>
 
 @Injectable()
 export class CreateAppointmentUseCase {
@@ -124,6 +124,6 @@ export class CreateAppointmentUseCase {
 
     await this.appointmentsRepository.create(appointment)
 
-    return right(undefined)
+    return right(appointment)
   }
 }

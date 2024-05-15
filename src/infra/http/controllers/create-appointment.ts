@@ -12,6 +12,7 @@ import { UserPayload } from "@/infra/auth/jwt.strategy"
 import { CurrentUser } from "@/infra/auth/current-user-decorator"
 import { AuthGuard } from "@nestjs/passport"
 import { CreateAppointmentUseCase } from "@/domain/beauty-salon/aplication/use-cases/create-appointent"
+import { AppointmentPresenter } from "../presenters/appointment-presenter"
 
 const createAppointmentBodySchema = z.object({
   servicesIds: z.array(z.string()),
@@ -47,10 +48,6 @@ export class CreateAppointmentController {
       throw new BadRequestException("invalid input")
     }
 
-    console.log(result)
-
-    return {
-      message: "ok",
-    }
+    return AppointmentPresenter.toHTTP(result.value)
   }
 }
