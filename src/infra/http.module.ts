@@ -1,3 +1,4 @@
+import { ForgotPasswordController } from "./http/controllers/forgot-password.controller"
 import { FetchAppointmentByClientController } from "./http/controllers/fetch-appointment-by-client"
 import { CreateServiceUseCase } from "./../domain/beauty-salon/aplication/use-cases/create-service"
 import { Module } from "@nestjs/common"
@@ -12,9 +13,6 @@ import { FetchAppointmentsWeekAvailabilityUseCase } from "@/domain/beauty-salon/
 import { FetchWeekAvailabilityController } from "./http/controllers/fetch-appointment-week-availability"
 import { CryptographyModule } from "./cryptography/cryptography.module"
 import { AuthModule } from "./auth/auth.module"
-
-import { MagicLinkService } from "./email/magic-link.service"
-import { EmailService } from "./email/email.service"
 
 import { AuthenticateClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/authenticate-client"
 import { RegisterClientUseCase } from "@/domain/beauty-salon/aplication/use-cases/register-client"
@@ -31,9 +29,13 @@ import { CheckAppointmentAvailabilityUseCase } from "@/domain/beauty-salon/aplic
 import { EditAppointmentController } from "./http/controllers/edit-appointment.controller"
 import { DeleteSubscriptionUseCase } from "@/domain/beauty-salon/aplication/use-cases/delete-subscriptions"
 import { DeleteSubscriptionController } from "./http/controllers/delete-subscriptions.controller"
+import { ForgotPasswordUseCase } from "@/domain/beauty-salon/aplication/use-cases/forgot-password"
+import { EnvService } from "./env/env.service"
+import { EmailModule } from "./email/email.module"
+import { EmailService } from "./email/emailService"
 
 @Module({
-  imports: [DatabaseModule, CryptographyModule, AuthModule],
+  imports: [DatabaseModule, CryptographyModule, AuthModule, EmailModule],
   controllers: [
     StripeController,
     CreateAppointmentController,
@@ -47,18 +49,20 @@ import { DeleteSubscriptionController } from "./http/controllers/delete-subscrip
     EditAppointmentController,
     FetchAppointmentByClientController,
     DeleteSubscriptionController,
+    ForgotPasswordController,
 
     // AuthenticateController,
   ],
   providers: [
-    StripeService,
-    MagicLinkService,
     EmailService,
+    StripeService,
     AuthenticateClientUseCase,
     RegisterClientUseCase,
     EditClientUseCase,
     EditAppointmentUseCase,
     DeleteSubscriptionUseCase,
+    ForgotPasswordUseCase,
+    EnvService,
 
     FetchClientUseCase,
     FetchAppointmentByClientUseCase,

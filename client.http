@@ -84,6 +84,18 @@ Authorization: Bearer {{authToken}}
 
 ###
 
+# @name  fetch-appointment-by-client
+POST {{baseUrl}}/forgot-password
+Content-Type: application/json
+
+
+{
+  "email": "gregorypraxedes@gmail.com"
+}
+
+###
+
+
 
 
 
