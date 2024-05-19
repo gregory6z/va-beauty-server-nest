@@ -50,6 +50,7 @@
     "nestjs-resend": "^0.0.3",
     "nestjs-stripe": "^1.0.0",
     "nodemailer": "^6.9.11",
+    "passport": "^0.7.0",
     "passport-facebook-token": "^4.0.0",
     "passport-google-token": "^0.1.2",
     "passport-jwt": "^4.0.1",
@@ -59,6 +60,7 @@
     "rxjs": "^7.8.1",
     "smtp-transport": "link:nodemailer/lib/smtp-transport",
     "stripe": "^14.13.0",
+    "superagent": "^9.0.2",
     "vitest": "^1.2.1",
     "zod": "^3.22.4",
     "zod-validation-error": "^2.1.0"
