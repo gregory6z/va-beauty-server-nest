@@ -21,8 +21,6 @@
     "test:e2e:watch": "vitest --config ./vitest.config.e2e.ts"
   },
   "dependencies": {
-    "@clerk/backend": "^0.37.3",
-    "@clerk/clerk-sdk-node": "^4.13.7",
     "@faker-js/faker": "^8.3.1",
     "@nestjs/axios": "^3.0.1",
     "@nestjs/common": "^10.3.1",
@@ -45,7 +43,6 @@
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.0",
     "faker": "^6.6.6",
-    "instance": "link:@types/@clerk/clerk-sdk-node/instance",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.1.0",
     "multer": "1.4.5-lts.1",
