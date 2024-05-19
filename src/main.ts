@@ -8,8 +8,7 @@ async function bootstrap() {
 
   const configService = app.get(EnvService)
   const port = configService.get("PORT")
-  const host = "RENDER" in process.env ? "0.0.0.0" : "localhost"
 
-  await app.listen(port, host)
+  await app.listen(3333)
 }
 bootstrap()
