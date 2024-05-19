@@ -11,9 +11,9 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server))
 
-  const configService = app.get(EnvService)
-  const port = configService.get("PORT")
+  // const configService = app.get(EnvService)
+  const port = process.env.PORT
 
-  await app.listen(port)
+  await app.listen(Number(port))
 }
 bootstrap()
